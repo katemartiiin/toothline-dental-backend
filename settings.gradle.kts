@@ -1,1 +1,1 @@
-rootProject.name = "toothlinedental"
+rootProject.name = "toothline-dental-backend"
