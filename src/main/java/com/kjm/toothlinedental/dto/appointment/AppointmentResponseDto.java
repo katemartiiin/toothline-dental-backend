@@ -1,11 +1,7 @@
-package com.kjm.toothlinedental.dto;
-
-import com.kjm.toothlinedental.model.Appointment;
-import com.kjm.toothlinedental.model.User;
+package com.kjm.toothlinedental.dto.appointment;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 public class AppointmentResponseDto {
 
@@ -23,6 +19,7 @@ public class AppointmentResponseDto {
     // Optional for admin/staff
     private Long dentistId;
     private String serviceName;
+    private String status;
 
     // Getters and setters
     public String getName() { return name; }
@@ -56,4 +53,8 @@ public class AppointmentResponseDto {
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
+
+    public String getStatus() { return status; }
+
+    public void setStatus(String status) { this.status = status; }
 }

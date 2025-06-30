@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long>, AppointmentRepositoryCustom {
 
-    List<Appointment> findAllByAppointmentDate(LocalDate date);
+    List<Appointment> findAllByAppointmentDateAndArchivedFalse(LocalDate date);
+
+    List<Appointment> findAllByArchivedTrue();
 }

@@ -1,7 +1,9 @@
 package com.kjm.toothlinedental.service;
 
-import com.kjm.toothlinedental.dto.AppointmentRequestDto;
-import com.kjm.toothlinedental.dto.AppointmentResponseDto;
+import com.kjm.toothlinedental.common.ApiResponse;
+import com.kjm.toothlinedental.dto.appointment.AppointmentCreateRequestDto;
+import com.kjm.toothlinedental.dto.appointment.AppointmentResponseDto;
+import com.kjm.toothlinedental.dto.appointment.AppointmentUpdateRequestDto;
 import com.kjm.toothlinedental.mapper.AppointmentMapper;
 import com.kjm.toothlinedental.model.Appointment;
 import com.kjm.toothlinedental.model.Patient;
@@ -53,7 +55,7 @@ public class AppointmentService {
     * For website - dentistId is not required
     * For admin system - dentistId can be assigned
     * */
-    public Appointment createAppointment(AppointmentRequestDto dto) {
+    public ApiResponse<AppointmentResponseDto> createAppointment(AppointmentCreateRequestDto dto) {
         // Check if patient exists by email
         Patient patient = patientRepository.findByEmail(dto.getEmail())
                 .orElseGet(() -> {
@@ -85,9 +87,11 @@ public class AppointmentService {
             appointment.setStatus("PENDING");
         }
 
-        return appointmentRepository.save(appointment);
-    }
+        Appointment saved = appointmentRepository.save(appointment);
+        AppointmentResponseDto responseDto = appointmentMapper.toDto(saved);
 
+        return new ApiResponse<>("Appointment created successfully", responseDto);
+    }
     /*
     * Fetch Appointments
     * Params: dentistId, patientName, appointmentDate
@@ -111,5 +115,51 @@ public class AppointmentService {
                 .orElseThrow(() -> new RuntimeException("Appointment not found with ID: " + id));
 
         return appointmentMapper.toDto(appointment);
+    }
+
+    public ApiResponse<AppointmentResponseDto> updateAppointment(Long id, AppointmentUpdateRequestDto dto) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        if (dto.getAppointmentDate() != null) {
+            appointment.setAppointmentDate(dto.getAppointmentDate());
+        }
+
+        if (dto.getAppointmentTime() != null) {
+            appointment.setAppointmentTime(dto.getAppointmentTime());
+        }
+
+        if (dto.getStatus() != null) {
+            appointment.setStatus(dto.getStatus());
+        }
+
+        if (dto.getDentistId() != null) {
+            User dentist = userRepository.findById(dto.getDentistId())
+                    .orElseThrow(() -> new RuntimeException("Dentist not found"));
+            if (!dentist.getRole().equals(Role.DENTIST)) {
+                throw new RuntimeException("Assigned user is not a dentist");
+            }
+            appointment.setDentist(dentist);
+        } else {
+            appointment.setDentist(null); // Clear assignment if null
+        }
+
+        Appointment saved = appointmentRepository.save(appointment);
+        return new ApiResponse<>("Appointment updated successfully", appointmentMapper.toDto(saved));
+    }
+
+    public void toggleArchiveAppointment(Long id, boolean isArchive) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        appointment.setArchived(isArchive);
+        appointmentRepository.save(appointment);
+    }
+
+    public List<AppointmentResponseDto> getArchivedAppointments() {
+        List<Appointment> archivedAppointments = appointmentRepository.findAllByArchivedTrue();
+        return archivedAppointments.stream()
+                .map(appointmentMapper::toDto)
+                .toList();
     }
 }

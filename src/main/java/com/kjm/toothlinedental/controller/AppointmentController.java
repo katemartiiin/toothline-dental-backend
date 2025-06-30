@@ -1,12 +1,12 @@
 package com.kjm.toothlinedental.controller;
 
-import com.kjm.toothlinedental.dto.AppointmentRequestDto;
+import com.kjm.toothlinedental.common.ApiResponse;
+import com.kjm.toothlinedental.dto.appointment.AppointmentCreateRequestDto;
+import com.kjm.toothlinedental.dto.appointment.AppointmentResponseDto;
 import com.kjm.toothlinedental.model.Appointment;
-import com.kjm.toothlinedental.model.Patient;
 import com.kjm.toothlinedental.repository.AppointmentRepository;
-import com.kjm.toothlinedental.repository.PatientRepository;
-import com.kjm.toothlinedental.repository.ServiceRepository;
 import com.kjm.toothlinedental.service.AppointmentService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,8 +26,8 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public Appointment createAppointment(@RequestBody AppointmentRequestDto dto) {
-        return appointmentService.createAppointment(dto); // no dentistId
+    public ResponseEntity<ApiResponse<AppointmentResponseDto>> createAppointment(@RequestBody AppointmentCreateRequestDto dto) {
+        return ResponseEntity.ok(appointmentService.createAppointment(dto)); // no dentistId
     }
 
     @GetMapping

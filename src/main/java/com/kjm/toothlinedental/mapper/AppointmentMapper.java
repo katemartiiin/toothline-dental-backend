@@ -1,6 +1,6 @@
 package com.kjm.toothlinedental.mapper;
 
-import com.kjm.toothlinedental.dto.AppointmentResponseDto;
+import com.kjm.toothlinedental.dto.appointment.AppointmentResponseDto;
 import com.kjm.toothlinedental.model.Appointment;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +16,7 @@ public class AppointmentMapper {
         dto.setServiceId(appointment.getService().getId());
         dto.setServiceName(appointment.getService().getName());
         dto.setNotes(appointment.getNotes());
+        dto.setStatus(appointment.getStatus());
         dto.setAppointmentDate(appointment.getAppointmentDate());
         dto.setAppointmentTime(appointment.getAppointmentTime());
         return dto;

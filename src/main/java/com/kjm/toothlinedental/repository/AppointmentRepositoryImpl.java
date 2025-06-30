@@ -27,6 +27,8 @@ public class AppointmentRepositoryImpl implements AppointmentRepositoryCustom {
 
         List<Predicate> predicates = new ArrayList<>();
 
+        predicates.add(cb.isFalse(root.get("archived")));
+
         if (dentistId != null) {
             predicates.add(cb.equal(root.get("dentist").get("id"), dentistId));
         }

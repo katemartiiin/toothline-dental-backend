@@ -1,13 +1,9 @@
-package com.kjm.toothlinedental.dto;
-
-import com.kjm.toothlinedental.model.Appointment;
-import com.kjm.toothlinedental.model.User;
+package com.kjm.toothlinedental.dto.appointment;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
-public class AppointmentRequestDto {
+public class AppointmentCreateRequestDto {
 
     // Patient info (used to find or create the patient)
     private String name;
@@ -22,10 +18,6 @@ public class AppointmentRequestDto {
 
     // Optional for admin/staff
     private Long dentistId;
-
-    // Filter appointments
-    private List<Appointment> appointments;
-    private String patientName;
 
     // Getters and setters
     public String getName() { return name; }
@@ -51,12 +43,4 @@ public class AppointmentRequestDto {
 
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
-
-    public List<Appointment> getAppointments() {
-        return appointments;
-    }
-    public void setAppointments(List<Appointment> appointments) { this.appointments = appointments; }
-
-    public String getPatientName() { return patientName; }
-    public void setPatientName(String patientName) { this.patientName = patientName; }
 }

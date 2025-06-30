@@ -34,6 +34,9 @@ public class Appointment {
 
     private LocalDateTime updatedAt;
 
+    @Column(nullable = false)
+    private boolean archived = false;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
@@ -72,4 +75,8 @@ public class Appointment {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
+
+    public boolean isArchived() { return archived; }
+
+    public void setArchived(boolean archived) { this.archived = archived; }
 }
