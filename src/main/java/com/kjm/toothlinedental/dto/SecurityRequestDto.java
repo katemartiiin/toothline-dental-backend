@@ -1,4 +1,4 @@
 package com.kjm.toothlinedental.dto;
 
-public class DentistRequest {
+public class SecurityRequestDto {
 }

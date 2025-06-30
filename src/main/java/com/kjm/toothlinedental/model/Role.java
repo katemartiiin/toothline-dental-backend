@@ -1,4 +1,7 @@
 package com.kjm.toothlinedental.model;
 
-public class Role {
+public enum Role {
+    ADMIN,
+    DENTIST,
+    STAFF
 }

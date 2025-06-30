@@ -1,4 +1,4 @@
 package com.kjm.toothlinedental.service;
 
-public class DentistService {
+public class DentistScheduleService {
 }
