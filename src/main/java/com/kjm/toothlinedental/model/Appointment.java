@@ -20,6 +20,10 @@ public class Appointment {
     @JoinColumn(name = "service_id")
     private Service service;
 
+    @ManyToOne
+    @JoinColumn(name = "dentist_id", nullable = true)
+    private User dentist;
+
     private String notes;
     private LocalDate appointmentDate;
     private LocalTime appointmentTime;
@@ -29,6 +33,9 @@ public class Appointment {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    @Column(nullable = false)
+    private boolean archived = false;
 
     @PrePersist
     protected void onCreate() {
@@ -51,6 +58,9 @@ public class Appointment {
     public Service getService() { return service; }
     public void setService(Service service) { this.service = service; }
 
+    public User getDentist() { return dentist; }
+    public void setDentist(User dentist) { this.dentist = dentist; }
+
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
 
@@ -65,4 +75,8 @@ public class Appointment {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
+
+    public boolean isArchived() { return archived; }
+
+    public void setArchived(boolean archived) { this.archived = archived; }
 }

@@ -1,11 +1,12 @@
 package com.kjm.toothlinedental.controller;
 
-import com.kjm.toothlinedental.dto.AppointmentRequestDto;
+import com.kjm.toothlinedental.common.ApiResponse;
+import com.kjm.toothlinedental.dto.appointment.AppointmentCreateRequestDto;
+import com.kjm.toothlinedental.dto.appointment.AppointmentResponseDto;
 import com.kjm.toothlinedental.model.Appointment;
-import com.kjm.toothlinedental.model.Patient;
 import com.kjm.toothlinedental.repository.AppointmentRepository;
-import com.kjm.toothlinedental.repository.PatientRepository;
-import com.kjm.toothlinedental.repository.ServiceRepository;
+import com.kjm.toothlinedental.service.AppointmentService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,38 +17,17 @@ import java.util.List;
 public class AppointmentController {
 
     private final AppointmentRepository appointmentRepository;
-    private final PatientRepository patientRepository;
-    private final ServiceRepository serviceRepository;
+    private final AppointmentService appointmentService;
 
     public AppointmentController(AppointmentRepository appointmentRepository,
-                                 PatientRepository patientRepository, ServiceRepository serviceRepository) {
+                                 AppointmentService appointmentService) {
         this.appointmentRepository = appointmentRepository;
-        this.patientRepository = patientRepository;
-        this.serviceRepository = serviceRepository;
+        this.appointmentService = appointmentService;
     }
 
     @PostMapping
-    public Appointment createAppointment(@RequestBody AppointmentRequestDto dto) {
-        // Check if patient exists : patient email
-        Patient patient = patientRepository.findByEmail(dto.getEmail())
-                .orElseGet(() -> { // else create patient
-                    Patient newPatient = new Patient();
-                    newPatient.setName(dto.getName());
-                    newPatient.setEmail(dto.getEmail());
-                    newPatient.setPhoneNumber(dto.getPhoneNumber());
-                    return patientRepository.save(newPatient);
-                });
-        // Create appointment
-        Appointment appointment = new Appointment();
-        appointment.setPatient(patient);
-        // set selected service id
-        appointment.setService(serviceRepository.findById(dto.getServiceId())
-                .orElseThrow(() -> new RuntimeException("Service not found")));
-        appointment.setNotes(dto.getNotes());
-        appointment.setAppointmentDate(dto.getAppointmentDate());
-        appointment.setAppointmentTime(dto.getAppointmentTime());
-        appointment.setStatus("PENDING"); // default appointment status
-        return appointmentRepository.save(appointment);
+    public ResponseEntity<ApiResponse<AppointmentResponseDto>> createAppointment(@RequestBody AppointmentCreateRequestDto dto) {
+        return ResponseEntity.ok(appointmentService.createAppointment(dto)); // no dentistId
     }
 
     @GetMapping
