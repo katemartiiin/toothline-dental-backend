@@ -16,7 +16,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/dashboard")
+@RequestMapping("/api/admin/dashboard")
 public class DashboardController {
 
     private final AppointmentRepository appointmentRepository;

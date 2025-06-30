@@ -20,7 +20,9 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
         String defaultEmail = "admin@toothline.com";
+        String defaultDentistEmail = "melissa.c@toothline.com";
 
+        // Admin
         if (userRepository.findByEmail(defaultEmail).isEmpty()) {
             User admin = new User();
             admin.setEmail(defaultEmail);
@@ -32,6 +34,20 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("System admin user created: " + defaultEmail);
         } else {
             System.out.println("System admin user already exists.");
+        }
+
+        // Dentist
+        if (userRepository.findByEmail(defaultDentistEmail).isEmpty()) {
+            User dentist = new User();
+            dentist.setEmail(defaultDentistEmail);
+            dentist.setPassword(passwordEncoder.encode("dentist123")); // secure this in prod
+            dentist.setName("Dr. Melissa Chen");
+            dentist.setRole(Role.DENTIST);
+
+            userRepository.save(dentist);
+            System.out.println("Default dentist created: " + defaultDentistEmail);
+        } else {
+            System.out.println("Default dentist already exists.");
         }
     }
 }

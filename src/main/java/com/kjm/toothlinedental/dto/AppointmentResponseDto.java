@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-public class AppointmentRequestDto {
+public class AppointmentResponseDto {
 
     // Patient info (used to find or create the patient)
     private String name;
@@ -22,10 +22,7 @@ public class AppointmentRequestDto {
 
     // Optional for admin/staff
     private Long dentistId;
-
-    // Filter appointments
-    private List<Appointment> appointments;
-    private String patientName;
+    private String serviceName;
 
     // Getters and setters
     public String getName() { return name; }
@@ -52,11 +49,11 @@ public class AppointmentRequestDto {
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
 
-    public List<Appointment> getAppointments() {
-        return appointments;
+    public String getServiceName() {
+        return serviceName;
     }
-    public void setAppointments(List<Appointment> appointments) { this.appointments = appointments; }
 
-    public String getPatientName() { return patientName; }
-    public void setPatientName(String patientName) { this.patientName = patientName; }
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
 }
