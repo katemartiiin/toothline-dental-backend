@@ -1,4 +1,4 @@
 package com.kjm.toothlinedental.model;
 
-public class Schedule {
+public class DentistSchedule {
 }

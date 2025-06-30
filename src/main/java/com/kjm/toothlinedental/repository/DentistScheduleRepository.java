@@ -1,4 +1,4 @@
 package com.kjm.toothlinedental.repository;
 
-public class ScheduleRepository {
+public class DentistScheduleRepository {
 }

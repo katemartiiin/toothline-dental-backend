@@ -1,4 +1,4 @@
 package com.kjm.toothlinedental.dto;
 
-public class ServiceRequest {
+public class ServiceRequestDto {
 }

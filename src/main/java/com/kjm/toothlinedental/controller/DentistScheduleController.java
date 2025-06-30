@@ -1,4 +1,4 @@
 package com.kjm.toothlinedental.controller;
 
-public class ScheduleController {
+public class DentistScheduleController {
 }

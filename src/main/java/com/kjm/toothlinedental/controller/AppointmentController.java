@@ -28,23 +28,25 @@ public class AppointmentController {
 
     @PostMapping
     public Appointment createAppointment(@RequestBody AppointmentRequestDto dto) {
+        // Check if patient exists : patient email
         Patient patient = patientRepository.findByEmail(dto.getEmail())
-                .orElseGet(() -> {
+                .orElseGet(() -> { // else create patient
                     Patient newPatient = new Patient();
                     newPatient.setName(dto.getName());
                     newPatient.setEmail(dto.getEmail());
                     newPatient.setPhoneNumber(dto.getPhoneNumber());
                     return patientRepository.save(newPatient);
                 });
-
+        // Create appointment
         Appointment appointment = new Appointment();
         appointment.setPatient(patient);
+        // set selected service id
         appointment.setService(serviceRepository.findById(dto.getServiceId())
                 .orElseThrow(() -> new RuntimeException("Service not found")));
         appointment.setNotes(dto.getNotes());
         appointment.setAppointmentDate(dto.getAppointmentDate());
         appointment.setAppointmentTime(dto.getAppointmentTime());
-        appointment.setStatus("PENDING");
+        appointment.setStatus("PENDING"); // default appointment status
         return appointmentRepository.save(appointment);
     }
 
