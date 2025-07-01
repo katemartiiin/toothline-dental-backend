@@ -2,7 +2,7 @@ package com.kjm.toothlinedental.dto;
 
 import java.time.LocalTime;
 
-public class DentistScheduleRequestDto {
+public class DentistScheduleResponseDto {
 
     private Long dentistId;
     private String schedDay;
@@ -17,7 +17,7 @@ public class DentistScheduleRequestDto {
     public void setSchedDay(String schedDay) { this.schedDay = schedDay; }
 
     public LocalTime getStartTime() { return startTime; }
-    public void setStartTime(LocalTime startTime) { this.startTime = startTime; }
+    public void setStartTime(LocalTime schedTime) { this.startTime = startTime; }
 
     public LocalTime getEndTime() { return endTime; }
     public void setEndTime(LocalTime endTime) { this.endTime = endTime; }
