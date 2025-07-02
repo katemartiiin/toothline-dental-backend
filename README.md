@@ -1,6 +1,6 @@
 # Toothline Dental Backend
 
-A Spring Boot backend for **Toothline Dental**, providing RESTful APIs, JWT-based authentication, PostgreSQL integration, and AI chatbot support.
+A Spring Boot backend for **Toothline Dental**, providing RESTful APIs, JWT-based authentication, and PostgreSQL integration.
 
 ---
 
