@@ -1,11 +1,16 @@
 package com.kjm.toothlinedental.dto;
 
-public class ServiceRequestDto {
+public class ServiceResponseDto {
 
+    private Long id;
     private String name;
     private String description;
     private int durationMinutes;
     private double price;
+
+    public Long getId() { return id; }
+
+    public void setId(Long id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

@@ -41,12 +41,13 @@ public class DentistScheduleController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
     public ResponseEntity<ApiResponse<DentistScheduleResponseDto>> createDentistSchedule(@RequestBody DentistScheduleRequestDto dto) {
         return ResponseEntity.ok(dentistScheduleService.createDentistSchedule(dto)); // no dentistId
     }
 
     @PutMapping("/{id}/update")
-    @PreAuthorize("hasAnyRole('STAFF', 'DENTIST')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
     public ResponseEntity<ApiResponse<DentistScheduleResponseDto>> updateDentistSchedule(@PathVariable Long id, @RequestBody DentistScheduleRequestDto dto) {
         return ResponseEntity.ok(dentistScheduleService.updateDentistSchedule(id, dto));
     }
