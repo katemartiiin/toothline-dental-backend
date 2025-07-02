@@ -12,8 +12,8 @@ import java.util.List;
 @org.springframework.stereotype.Service
 public class ProcedureService {
 
-    private ServiceRepository serviceRepository;
-    private ServiceMapper serviceMapper;
+    private final ServiceRepository serviceRepository;
+    private final ServiceMapper serviceMapper;
 
     public ProcedureService (ServiceRepository serviceRepository,
                              ServiceMapper serviceMapper
