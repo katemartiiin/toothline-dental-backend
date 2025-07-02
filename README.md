@@ -19,7 +19,7 @@ A Spring Boot backend for **Toothline Dental**, providing RESTful APIs, JWT-base
 - **Language:** Kotlin
 - **Framework:** Spring Boot 3.2+
 - **Database:** PostgreSQL
-- **Authentication:** Spring Security with planned JWT support
+- **Authentication:** Spring Security with JWT support
 - **Build Tool:** Gradle (Kotlin DSL)
 - **Java Version:** 21
 
