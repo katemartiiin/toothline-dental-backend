@@ -1,6 +1,7 @@
 package com.kjm.toothlinedental.service;
 
 import com.kjm.toothlinedental.common.ApiResponse;
+import com.kjm.toothlinedental.common.SecurityUtils;
 import com.kjm.toothlinedental.dto.appointment.AppointmentCreateRequestDto;
 import com.kjm.toothlinedental.dto.appointment.AppointmentResponseDto;
 import com.kjm.toothlinedental.dto.appointment.AppointmentUpdateRequestDto;
@@ -27,12 +28,14 @@ public class AppointmentService {
     private final ServiceRepository serviceRepository;
     private final UserRepository userRepository;
     private final AppointmentMapper appointmentMapper;
+    private final AuditLogService auditLogService;
 
     public AppointmentService(AppointmentRepository appointmentRepository,
                               PatientRepository patientRepository,
                               ServiceRepository serviceRepository,
                               UserRepository userRepository,
-                              AppointmentMapper appointmentMapper) {
+                              AppointmentMapper appointmentMapper,
+                              AuditLogService auditLogService) {
         // Repository
         this.appointmentRepository = appointmentRepository;
         this.patientRepository = patientRepository;
@@ -41,6 +44,9 @@ public class AppointmentService {
 
         // Mapper
         this.appointmentMapper = appointmentMapper;
+
+        // Service
+        this.auditLogService = auditLogService;
     }
     // validate if selected User is a dentist
     public void assignDentist(Appointment appointment, User user) {
@@ -145,6 +151,10 @@ public class AppointmentService {
         }
 
         Appointment saved = appointmentRepository.save(appointment);
+
+        String performedBy = SecurityUtils.getCurrentUsername();
+        auditLogService.logAction("UPDATE_APPOINTMENT", performedBy, "Updated details for appointment #" + id);
+
         return new ApiResponse<>("Appointment updated successfully", appointmentMapper.toDto(saved));
     }
 
@@ -154,6 +164,10 @@ public class AppointmentService {
 
         appointment.setArchived(isArchive);
         appointmentRepository.save(appointment);
+
+        String performedBy = SecurityUtils.getCurrentUsername();
+        String auditMessage = isArchive ? "Archived" : "Restored" + " appointment #" + id;
+        auditLogService.logAction("ARCHIVE_APPOINTMENT", performedBy, auditMessage);
     }
 
     public List<AppointmentResponseDto> getArchivedAppointments() {

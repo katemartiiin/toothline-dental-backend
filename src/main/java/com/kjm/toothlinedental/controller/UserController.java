@@ -1,0 +1,82 @@
+package com.kjm.toothlinedental.controller;
+
+import com.kjm.toothlinedental.common.ApiResponse;
+import com.kjm.toothlinedental.dto.*;
+import com.kjm.toothlinedental.service.UserService;
+import com.kjm.toothlinedental.repository.UserRepository;
+import com.kjm.toothlinedental.model.User;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/admin/users")
+public class UserController {
+
+    private final UserService userService;
+    private final UserRepository userRepository;
+
+    public UserController(UserService userService,
+                          UserRepository userRepository) {
+        this.userService = userService;
+        this.userRepository = userRepository;
+    }
+
+    // Get all users - admin only
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    // Get user by ID - admin only
+    @GetMapping("/{id}/view")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    // Get current user's profile
+    @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UserResponseDto> getCurrentUserProfile(
+            @AuthenticationPrincipal String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return ResponseEntity.ok(userService.getUserById(user.getId()));
+    }
+
+    // Create user - admin only
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<UserCreateResponseDto>> createUser(@RequestBody UserRequestDto dto) {
+        return ResponseEntity.ok(userService.createUser(dto));
+    }
+
+    // Update own profile (including password)
+    @PutMapping("/me")
+    public ResponseEntity<ApiResponse<UserProfileResponseDto>> updateUserProfile(
+            @AuthenticationPrincipal String email,
+            @RequestBody UserRequestDto dto) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return ResponseEntity.ok(userService.updateUserProfile(user.getId(), dto));
+    }
+
+    // Admin update: change role / reset password
+    @PutMapping("/{id}/update")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<AdminUpdateUserResponseDto>> updateUserAsAdmin(
+            @PathVariable Long id,
+            @RequestBody AdminUpdateUserRequestDto dto) {
+        return ResponseEntity.ok(userService.updateUserAsAdmin(id, dto));
+    }
+}

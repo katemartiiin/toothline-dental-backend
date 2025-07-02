@@ -1,6 +1,7 @@
 package com.kjm.toothlinedental.service;
 
 import com.kjm.toothlinedental.common.ApiResponse;
+import com.kjm.toothlinedental.common.SecurityUtils;
 import com.kjm.toothlinedental.dto.DentistScheduleResponseDto;
 import com.kjm.toothlinedental.dto.DentistScheduleRequestDto;
 import com.kjm.toothlinedental.mapper.DentistScheduleMapper;
@@ -9,9 +10,7 @@ import com.kjm.toothlinedental.model.User;
 import com.kjm.toothlinedental.repository.*;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class DentistScheduleService {
@@ -19,14 +18,18 @@ public class DentistScheduleService {
     private final UserRepository userRepository;
     private final DentistScheduleRepository dentistScheduleRepository;
     private final DentistScheduleMapper dentistScheduleMapper;
+    private final AuditLogService auditLogService;
 
     public DentistScheduleService(UserRepository userRepository,
                                   DentistScheduleRepository dentistScheduleRepository,
-                                  DentistScheduleMapper dentistScheduleMapper) {
+                                  DentistScheduleMapper dentistScheduleMapper,
+                                  AuditLogService auditLogService
+    ) {
         // Repository
         this.userRepository = userRepository;
         this.dentistScheduleRepository = dentistScheduleRepository;
         this.dentistScheduleMapper = dentistScheduleMapper;
+        this.auditLogService = auditLogService;
     }
 
     /*
@@ -45,6 +48,9 @@ public class DentistScheduleService {
 
         DentistSchedule saved = dentistScheduleRepository.save(schedule);
         DentistScheduleResponseDto responseDto = dentistScheduleMapper.toDto(saved);
+
+        String performedBy = SecurityUtils.getCurrentUsername();
+        auditLogService.logAction("CREATE_SCHEDULE", performedBy, "Created dentist schedule #" + schedule.getId());
 
         return new ApiResponse<>("Schedule created successfully", responseDto);
     }
@@ -78,6 +84,10 @@ public class DentistScheduleService {
         }
 
         DentistSchedule saved = dentistScheduleRepository.save(schedule);
+
+        String performedBy = SecurityUtils.getCurrentUsername();
+        auditLogService.logAction("UPDATE_SCHEDULE", performedBy, "Updated dentist schedule #" + id);
+
         return new ApiResponse<>("Schedule updated successfully", dentistScheduleMapper.toDto(saved));
     }
 
@@ -87,5 +97,8 @@ public class DentistScheduleService {
         }
 
         dentistScheduleRepository.deleteById(id);
+
+        String performedBy = SecurityUtils.getCurrentUsername();
+        auditLogService.logAction("DELETE_SCHEDULE", performedBy, "Deleted dentist schedule #" + id);
     }
 }

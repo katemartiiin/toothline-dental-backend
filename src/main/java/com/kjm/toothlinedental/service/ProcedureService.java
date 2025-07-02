@@ -1,6 +1,7 @@
 package com.kjm.toothlinedental.service;
 
 import com.kjm.toothlinedental.common.ApiResponse;
+import com.kjm.toothlinedental.common.SecurityUtils;
 import com.kjm.toothlinedental.dto.ServiceRequestDto;
 import com.kjm.toothlinedental.dto.ServiceResponseDto;
 import com.kjm.toothlinedental.mapper.ServiceMapper;
@@ -14,12 +15,15 @@ public class ProcedureService {
 
     private final ServiceRepository serviceRepository;
     private final ServiceMapper serviceMapper;
+    private final AuditLogService auditLogService;
 
     public ProcedureService (ServiceRepository serviceRepository,
-                             ServiceMapper serviceMapper
+                             ServiceMapper serviceMapper,
+                             AuditLogService auditLogService
     ) {
         this.serviceRepository = serviceRepository;
         this.serviceMapper = serviceMapper;
+        this.auditLogService = auditLogService;
     }
 
     /*
@@ -33,7 +37,7 @@ public class ProcedureService {
     }
 
     /*
-    * Fetch by Service Id
+    * Fetch by serviceId
     * */
     public ServiceResponseDto getServiceById(Long id) {
         Service service = serviceRepository.findById(id)
@@ -54,6 +58,9 @@ public class ProcedureService {
 
         Service saved = serviceRepository.save(service);
         ServiceResponseDto responseDto = serviceMapper.toDto(saved);
+
+        String performedBy = SecurityUtils.getCurrentUsername();
+        auditLogService.logAction("CREATE_SERVICE", performedBy, "Created service #" + service.getId());
 
         return new ApiResponse<>("Service created successfully", responseDto);
     }
@@ -79,6 +86,10 @@ public class ProcedureService {
         }
 
         Service saved = serviceRepository.save(service);
+
+        String performedBy = SecurityUtils.getCurrentUsername();
+        auditLogService.logAction("UPDATE_SERVICE", performedBy, "Updated service #" + id);
+
         return new ApiResponse<>("Service updated successfully", serviceMapper.toDto(saved));
     }
 
@@ -88,6 +99,9 @@ public class ProcedureService {
         }
 
         serviceRepository.deleteById(id);
+
+        String performedBy = SecurityUtils.getCurrentUsername();
+        auditLogService.logAction("DELETE_SERVICE", performedBy, "Deleted service #" + id);
     }
 
 }
