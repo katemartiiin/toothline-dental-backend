@@ -4,6 +4,13 @@ A Spring Boot application for **Toothline Dental Clinic**, providing RESTful API
 
 ---
 
+## 🦷 About the Name
+Toothline is a name derived from two words:
+- Tooth – representing the dental domain
+- Baseline – representing a base template or starting point
+
+Together, Toothline reflects the project's purpose as a foundational template for building dental clinic systems.
+
 ## 🚀 Features
 
 - ✅ RESTful API using Spring Web
