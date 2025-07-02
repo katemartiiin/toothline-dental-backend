@@ -14,6 +14,8 @@ public class Patient {
     private String email;
     private String phoneNumber;
 
+    private Boolean archived;
+
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
@@ -42,6 +44,9 @@ public class Patient {
 
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+
+    public Boolean getArchived() { return archived; }
+    public void setArchived(Boolean archived) { this.archived = archived; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
