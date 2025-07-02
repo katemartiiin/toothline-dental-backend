@@ -11,8 +11,6 @@ A Spring Boot backend for **Toothline Dental**, providing RESTful APIs, JWT-base
 - ✅ Input validation with Jakarta Validation
 - ✅ Hot reload via Spring Boot DevTools
 - ✅ JWT-based authentication
-- 🤖 AI chatbot integration (planned)
-- 🐘 Flyway-ready database migration (optional)
 
 ---
 
@@ -22,7 +20,6 @@ A Spring Boot backend for **Toothline Dental**, providing RESTful APIs, JWT-base
 - **Framework:** Spring Boot 3.2+
 - **Database:** PostgreSQL
 - **Authentication:** Spring Security with planned JWT support
-- **AI Integration:** (e.g. OpenAI API or custom chatbot backend)
 - **Build Tool:** Gradle (Kotlin DSL)
 - **Java Version:** 21
 
@@ -92,7 +89,6 @@ spring.jpa.show-sql=true
 
 ## 🔐 Future Features
 
-- AI chatbot integration (e.g. patient inquiries or appointment handling)
 - Email/SMS notification support
 
 ---
