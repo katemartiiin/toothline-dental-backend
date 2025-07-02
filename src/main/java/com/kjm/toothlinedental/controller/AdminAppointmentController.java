@@ -24,7 +24,7 @@ public class AdminAppointmentController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('STAFF', 'DENTIST')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'DENTIST')")
     public ResponseEntity<ApiResponse<AppointmentResponseDto>> createAppointmentAsAdmin(@RequestBody AppointmentCreateRequestDto dto) {
         return ResponseEntity.ok(appointmentService.createAppointment(dto));
     }
@@ -61,7 +61,7 @@ public class AdminAppointmentController {
     }
 
     @PutMapping("/{id}/archive")
-    @PreAuthorize("hasAnyRole('DENTIST')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
     public ResponseEntity<ApiResponse<Void>> toggleArchive(
             @PathVariable Long id,
             @RequestParam boolean archived) {
