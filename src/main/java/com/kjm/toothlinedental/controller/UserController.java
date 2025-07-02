@@ -1,17 +1,16 @@
 package com.kjm.toothlinedental.controller;
 
-import com.kjm.toothlinedental.common.ApiResponse;
-import com.kjm.toothlinedental.dto.*;
-import com.kjm.toothlinedental.service.UserService;
-import com.kjm.toothlinedental.repository.UserRepository;
-import com.kjm.toothlinedental.model.User;
-
+import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.kjm.toothlinedental.dto.*;
+import com.kjm.toothlinedental.model.User;
+import com.kjm.toothlinedental.common.ApiResponse;
+import com.kjm.toothlinedental.service.UserService;
+import com.kjm.toothlinedental.repository.UserRepository;
 
 @RestController
 @RequestMapping("/api/admin/users")

@@ -1,8 +1,8 @@
 package com.kjm.toothlinedental.model;
 
-import jakarta.persistence.*;
 import java.time.LocalTime;
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
 @Entity
 public class DentistSchedule {

@@ -1,9 +1,10 @@
 package com.kjm.toothlinedental.mapper;
 
-import com.kjm.toothlinedental.dto.UserProfileResponseDto;
-import com.kjm.toothlinedental.dto.UserResponseDto;
-import com.kjm.toothlinedental.model.User;
 import org.springframework.stereotype.Component;
+
+import com.kjm.toothlinedental.model.User;
+import com.kjm.toothlinedental.dto.UserResponseDto;
+import com.kjm.toothlinedental.dto.UserProfileResponseDto;
 
 @Component
 public class UserMapper {

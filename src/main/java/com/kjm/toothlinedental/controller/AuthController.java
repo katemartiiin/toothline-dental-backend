@@ -1,22 +1,20 @@
 package com.kjm.toothlinedental.controller;
 
-import com.kjm.toothlinedental.dto.LoginRequestDto;
-import com.kjm.toothlinedental.dto.LoginResponseDto;
-import com.kjm.toothlinedental.model.User;
-import com.kjm.toothlinedental.repository.UserRepository;
-import com.kjm.toothlinedental.service.JwtService;
-import com.kjm.toothlinedental.service.TokenBlacklistService;
+import java.util.Optional;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
+import com.kjm.toothlinedental.model.User;
+import com.kjm.toothlinedental.dto.LoginRequestDto;
+import com.kjm.toothlinedental.dto.LoginResponseDto;
+import com.kjm.toothlinedental.service.JwtService;
+import com.kjm.toothlinedental.service.TokenBlacklistService;
+import com.kjm.toothlinedental.repository.UserRepository;
 
 @RestController
 @RequestMapping("/api/auth")

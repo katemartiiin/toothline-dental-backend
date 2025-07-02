@@ -1,15 +1,16 @@
 package com.kjm.toothlinedental.service;
 
-import com.kjm.toothlinedental.model.User;
+import java.util.Date;
+import java.util.Base64;
+
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Service;
-import io.github.cdimascio.dotenv.Dotenv;
 
-import java.util.Base64;
-import java.util.Date;
+import com.kjm.toothlinedental.model.User;
 
 @Service
 public class JwtService {

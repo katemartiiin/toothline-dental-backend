@@ -1,17 +1,19 @@
 package com.kjm.toothlinedental.repository;
 
-import com.kjm.toothlinedental.model.Appointment;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
-import org.springframework.stereotype.Repository;
-
+import java.util.List;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import org.springframework.stereotype.Repository;
+
+import com.kjm.toothlinedental.model.Appointment;
 
 @Repository
 public class AppointmentRepositoryImpl implements AppointmentRepositoryCustom {

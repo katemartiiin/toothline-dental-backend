@@ -1,16 +1,14 @@
 package com.kjm.toothlinedental.controller;
 
-import com.kjm.toothlinedental.dto.DashboardRequestDto;
-import com.kjm.toothlinedental.model.Appointment;
-import com.kjm.toothlinedental.repository.AppointmentRepository;
-import com.kjm.toothlinedental.repository.PatientRepository;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDate;
 import java.util.List;
+import java.time.LocalDate;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.kjm.toothlinedental.model.Appointment;
+import com.kjm.toothlinedental.dto.DashboardRequestDto;
+import com.kjm.toothlinedental.repository.PatientRepository;
+import com.kjm.toothlinedental.repository.AppointmentRepository;
 
 @RestController
 @RequestMapping("/api/admin/dashboard")

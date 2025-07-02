@@ -1,7 +1,6 @@
 package com.kjm.toothlinedental.model;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 @Entity

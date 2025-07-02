@@ -1,20 +1,17 @@
 package com.kjm.toothlinedental.controller;
 
+import java.util.List;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import com.kjm.toothlinedental.common.ApiResponse;
-import com.kjm.toothlinedental.dto.DashboardRequestDto;
-import com.kjm.toothlinedental.dto.DentistScheduleFetchResponseDto;
+import com.kjm.toothlinedental.model.DentistSchedule;
+import com.kjm.toothlinedental.service.DentistScheduleService;
 import com.kjm.toothlinedental.dto.DentistScheduleRequestDto;
 import com.kjm.toothlinedental.dto.DentistScheduleResponseDto;
-import com.kjm.toothlinedental.model.Appointment;
-import com.kjm.toothlinedental.model.DentistSchedule;
+import com.kjm.toothlinedental.dto.DentistScheduleFetchResponseDto;
 import com.kjm.toothlinedental.repository.DentistScheduleRepository;
-import com.kjm.toothlinedental.service.DentistScheduleService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/schedules")

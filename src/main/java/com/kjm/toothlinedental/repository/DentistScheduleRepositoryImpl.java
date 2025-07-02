@@ -1,16 +1,18 @@
 package com.kjm.toothlinedental.repository;
 
-import com.kjm.toothlinedental.model.DentistSchedule;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import java.util.List;
+import java.util.ArrayList;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+
+import com.kjm.toothlinedental.model.DentistSchedule;
 
 @Repository
 public class DentistScheduleRepositoryImpl implements DentistScheduleRepositoryCustom {

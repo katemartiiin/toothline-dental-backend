@@ -1,12 +1,13 @@
 package com.kjm.toothlinedental.config;
 
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.kjm.toothlinedental.model.Role;
 import com.kjm.toothlinedental.model.User;
 import com.kjm.toothlinedental.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class DataInitializer implements CommandLineRunner {

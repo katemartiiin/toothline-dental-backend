@@ -1,15 +1,15 @@
 package com.kjm.toothlinedental.controller;
 
-import com.kjm.toothlinedental.common.ApiResponse;
-import com.kjm.toothlinedental.dto.appointment.AppointmentCreateRequestDto;
-import com.kjm.toothlinedental.dto.appointment.AppointmentResponseDto;
-import com.kjm.toothlinedental.model.Appointment;
-import com.kjm.toothlinedental.repository.AppointmentRepository;
-import com.kjm.toothlinedental.service.AppointmentService;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.kjm.toothlinedental.common.ApiResponse;
+import com.kjm.toothlinedental.model.Appointment;
+import com.kjm.toothlinedental.service.AppointmentService;
+import com.kjm.toothlinedental.repository.AppointmentRepository;
+import com.kjm.toothlinedental.dto.appointment.AppointmentResponseDto;
+import com.kjm.toothlinedental.dto.appointment.AppointmentCreateRequestDto;
 
 @RestController
 @RequestMapping("/api/appointments")

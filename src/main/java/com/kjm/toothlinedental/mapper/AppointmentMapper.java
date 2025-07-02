@@ -1,8 +1,9 @@
 package com.kjm.toothlinedental.mapper;
 
-import com.kjm.toothlinedental.dto.appointment.AppointmentResponseDto;
-import com.kjm.toothlinedental.model.Appointment;
 import org.springframework.stereotype.Component;
+
+import com.kjm.toothlinedental.model.Appointment;
+import com.kjm.toothlinedental.dto.appointment.AppointmentResponseDto;
 
 @Component
 public class AppointmentMapper {

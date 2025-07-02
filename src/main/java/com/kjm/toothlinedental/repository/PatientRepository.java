@@ -1,10 +1,10 @@
 package com.kjm.toothlinedental.repository;
 
-import com.kjm.toothlinedental.model.Patient;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.kjm.toothlinedental.model.Patient;
 
 public interface PatientRepository extends JpaRepository<Patient, Long> {
     Optional<Patient> findByEmail(String email);

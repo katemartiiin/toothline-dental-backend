@@ -1,8 +1,9 @@
 package com.kjm.toothlinedental.dto;
 
-import com.kjm.toothlinedental.model.Role;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+
+import com.kjm.toothlinedental.model.Role;
 
 public class UserResponseDto {
 
