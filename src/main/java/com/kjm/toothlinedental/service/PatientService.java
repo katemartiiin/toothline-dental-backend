@@ -1,25 +1,30 @@
 package com.kjm.toothlinedental.service;
 
 import com.kjm.toothlinedental.common.ApiResponse;
+import com.kjm.toothlinedental.common.SecurityUtils;
 import com.kjm.toothlinedental.dto.PatientRequestDto;
 import com.kjm.toothlinedental.dto.PatientResponseDto;
 import com.kjm.toothlinedental.mapper.PatientMapper;
 import com.kjm.toothlinedental.model.Patient;
 import com.kjm.toothlinedental.repository.PatientRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@org.springframework.stereotype.Service
+@Service
 public class PatientService {
 
     private final PatientRepository patientRepository;
     private final PatientMapper patientMapper;
+    private final AuditLogService auditLogService;
 
     public PatientService (PatientRepository patientRepository,
-                             PatientMapper patientMapper
+                             PatientMapper patientMapper,
+                           AuditLogService auditLogService
     ) {
         this.patientRepository = patientRepository;
         this.patientMapper = patientMapper;
+        this.auditLogService = auditLogService;
     }
 
     /*
@@ -62,7 +67,7 @@ public class PatientService {
     }
 
     /*
-     * Create Service
+     * Create Patient
      * */
     public ApiResponse<PatientResponseDto> createPatient(PatientRequestDto dto) {
 
@@ -73,6 +78,9 @@ public class PatientService {
 
         Patient saved = patientRepository.save(patient);
         PatientResponseDto responseDto = patientMapper.toDto(saved);
+
+        String performedBy = SecurityUtils.getCurrentUsername();
+        auditLogService.logAction("CREATE_PATIENT", performedBy, "Created patient #" + patient.getId());
 
         return new ApiResponse<>("Patient created successfully", responseDto);
     }
@@ -94,6 +102,10 @@ public class PatientService {
         }
 
         Patient saved = patientRepository.save(patient);
+
+        String performedBy = SecurityUtils.getCurrentUsername();
+        auditLogService.logAction("UPDATE_PATIENT", performedBy, "Updated patient #" + id);
+
         return new ApiResponse<>("Patient updated successfully", patientMapper.toDto(saved));
     }
 
@@ -103,6 +115,10 @@ public class PatientService {
 
         patient.setArchived(isArchive);
         patientRepository.save(patient);
+
+        String performedBy = SecurityUtils.getCurrentUsername();
+        String message = isArchive ? "Archived" : "Restored" + " patient #" + id;
+        auditLogService.logAction("ARCHIVE_PATIENT", performedBy, message);
     }
 
     public List<PatientResponseDto> getArchivedPatients() {
