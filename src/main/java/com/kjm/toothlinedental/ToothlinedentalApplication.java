@@ -1,4 +1,4 @@
-package com.kjm.toothlinedental.system;
+package com.kjm.toothlinedental;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
