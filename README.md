@@ -10,7 +10,7 @@ A Spring Boot backend for **Toothline Dental**, providing RESTful APIs, JWT-base
 - ✅ PostgreSQL with Spring Data JPA
 - ✅ Input validation with Jakarta Validation
 - ✅ Hot reload via Spring Boot DevTools
-- 🔒 JWT-based authentication (coming soon)
+- ✅ JWT-based authentication
 - 🤖 AI chatbot integration (planned)
 - 🐘 Flyway-ready database migration (optional)
 
@@ -34,13 +34,18 @@ A Spring Boot backend for **Toothline Dental**, providing RESTful APIs, JWT-base
 src/
 ├── main/
 │   ├── kotlin/com/toothline/dental
+│   │   ├── common/
+│   │   ├── config/
 │   │   ├── controller/
 │   │   ├── dto/
-│   │   ├── entity/
+│   │   ├── mapper/
+│   │   ├── model/
 │   │   ├── repository/
-│   │   └── service/
+│   │   ├── security/
+│   │   ├── service/
+│   │   └── system/
 │   └── resources/
-│       ├── application.yml
+│       ├── application.properties
 │       └── ...
 └── test/
 ```
@@ -58,18 +63,15 @@ cd toothline-dental-backend
 
 ### 2. Configure Environment
 
-Edit `src/main/resources/application.yml`:
+Edit `src/main/resources/application.properties`:
 
-```yaml
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/toothlinedb
-    username: your_username
-    password: your_password
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/toothlinedb
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
 ```
 
 ### 3. Run the App
@@ -90,9 +92,7 @@ spring:
 
 ## 🔐 Future Features
 
-- JWT-based authentication and authorization
 - AI chatbot integration (e.g. patient inquiries or appointment handling)
-- Admin dashboard API
 - Email/SMS notification support
 
 ---
