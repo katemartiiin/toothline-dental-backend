@@ -31,11 +31,14 @@ public class AdminAppointmentController {
 
     @PostMapping("/fetch")
     @PreAuthorize("hasAnyRole('STAFF', 'DENTIST', 'ADMIN')")
-    public ResponseEntity<List<AppointmentResponseDto>> fetchAppointments(@RequestBody AppointmentRequestDto request) {
+    public ResponseEntity<List<AppointmentResponseDto>> fetchAppointments(@RequestHeader("Authorization") String authHeader,
+                                                                          @RequestBody AppointmentRequestDto request) {
+        String token = authHeader.replace("Bearer ", "");
         List<AppointmentResponseDto> results = appointmentService.fetchAppointmentsBy(
-                request.getDentistId(),
+                request.getServiceId(),
                 request.getPatientName(),
-                request.getAppointmentDate()
+                request.getAppointmentDate(),
+                token
         );
         return ResponseEntity.ok(results);
     }

@@ -6,12 +6,12 @@ public class AppointmentRequestDto {
 
     // Appointment info
     private LocalDate appointmentDate;
-    private Long dentistId;
+    private Long serviceId;
     private String patientName;
 
     // Getters and setters
-    public Long getDentistId() { return dentistId; }
-    public void setDentistId(Long dentistId) { this.dentistId = dentistId; }
+    public Long getServiceId() { return serviceId; }
+    public void setServiceId(Long serviceId) { this.serviceId = serviceId; }
 
     public LocalDate getAppointmentDate() { return appointmentDate; }
     public void setAppointmentDate(LocalDate appointmentDate) { this.appointmentDate = appointmentDate; }

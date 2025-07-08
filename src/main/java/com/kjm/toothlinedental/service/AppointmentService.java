@@ -2,7 +2,9 @@ package com.kjm.toothlinedental.service;
 
 import java.util.List;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import com.kjm.toothlinedental.model.Role;
@@ -32,13 +34,15 @@ public class AppointmentService {
     private final UserRepository userRepository;
     private final AppointmentMapper appointmentMapper;
     private final AuditLogService auditLogService;
+    private final JwtService jwtService;
 
     public AppointmentService(AppointmentRepository appointmentRepository,
                               PatientRepository patientRepository,
                               ServiceRepository serviceRepository,
                               UserRepository userRepository,
                               AppointmentMapper appointmentMapper,
-                              AuditLogService auditLogService) {
+                              AuditLogService auditLogService,
+                              JwtService jwtService) {
         // Repository
         this.appointmentRepository = appointmentRepository;
         this.patientRepository = patientRepository;
@@ -50,6 +54,7 @@ public class AppointmentService {
 
         // Service
         this.auditLogService = auditLogService;
+        this.jwtService = jwtService;
     }
     // validate if selected User is a dentist
     public void assignDentist(Appointment appointment, User user) {
@@ -106,8 +111,15 @@ public class AppointmentService {
     * Params: dentistId, patientName, appointmentDate
     * Used for fetching appointments by parameters
     * */
-    public List<AppointmentResponseDto> fetchAppointmentsBy(Long dentistId, String patientName, LocalDate appointmentDate) {
-        List<Appointment> appointments = appointmentRepository.findFilteredAppointments(dentistId, patientName, appointmentDate);
+    public List<AppointmentResponseDto> fetchAppointmentsBy(Long serviceId, String patientName, LocalDate appointmentDate, String token) {
+        Long dentistId = null;
+        String role = jwtService.getRole(token);
+
+        if (Objects.equals(role, "DENTIST")) {
+            dentistId = Long.valueOf(jwtService.getUserId(token));
+        }
+
+        List<Appointment> appointments = appointmentRepository.findFilteredAppointments(serviceId, patientName, appointmentDate, dentistId);
 
         return appointments.stream()
                 .map(appointmentMapper::toDto)
