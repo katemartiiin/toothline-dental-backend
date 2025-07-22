@@ -1,5 +1,7 @@
 package com.kjm.toothlinedental.dto.appointment;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -15,6 +17,8 @@ public class AppointmentResponseDto {
     // Appointment info
     private Long serviceId;
     private LocalDate appointmentDate;
+
+    @JsonFormat(pattern = "hh:mm a")
     private LocalTime appointmentTime;
     private String notes;
 

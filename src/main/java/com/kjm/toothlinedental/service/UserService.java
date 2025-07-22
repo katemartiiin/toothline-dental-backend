@@ -1,6 +1,8 @@
 package com.kjm.toothlinedental.service;
 
 import java.util.List;
+
+import com.kjm.toothlinedental.model.Role;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -38,6 +40,24 @@ public class UserService {
      * */
     public List<UserResponseDto> getAllUsers() {
         return userRepository.findAll()
+                .stream()
+                .map(userMapper::toDto)
+                .toList();
+    }
+
+    /*
+    * Fetch users by role
+    * */
+    public List<UserResponseDto> getUsersByRole(String role) {
+        Role roleEnum;
+
+        try {
+            roleEnum = Role.valueOf(role.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid role: " + role);
+        }
+
+        return userRepository.findByRole(roleEnum)
                 .stream()
                 .map(userMapper::toDto)
                 .toList();
