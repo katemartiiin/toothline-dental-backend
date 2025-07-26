@@ -5,12 +5,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Service;
-
-import com.kjm.toothlinedental.model.Role;
-import com.kjm.toothlinedental.model.User;
-import com.kjm.toothlinedental.model.Patient;
-import com.kjm.toothlinedental.model.Appointment;
+import com.kjm.toothlinedental.model.*;
 
 import com.kjm.toothlinedental.common.ApiResponse;
 import com.kjm.toothlinedental.common.SecurityUtils;
@@ -25,7 +20,7 @@ import com.kjm.toothlinedental.dto.appointment.AppointmentResponseDto;
 import com.kjm.toothlinedental.dto.appointment.AppointmentUpdateRequestDto;
 import com.kjm.toothlinedental.dto.appointment.AppointmentCreateRequestDto;
 
-@Service
+@org.springframework.stereotype.Service
 public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
@@ -96,9 +91,9 @@ public class AppointmentService {
                 throw new IllegalArgumentException("Assigned user must be a dentist.");
             }
             appointment.setDentist(dentist);
-            appointment.setStatus("CONFIRMED");
+            appointment.setStatus(AppointmentStatus.CONFIRMED);
         } else {
-            appointment.setStatus("PENDING");
+            appointment.setStatus(AppointmentStatus.PENDING);
         }
 
         Appointment saved = appointmentRepository.save(appointment);
@@ -138,6 +133,9 @@ public class AppointmentService {
         return appointmentMapper.toDto(appointment);
     }
 
+    /*
+    * Update appointment
+    * */
     public ApiResponse<AppointmentResponseDto> updateAppointment(Long id, AppointmentUpdateRequestDto dto) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
@@ -161,14 +159,41 @@ public class AppointmentService {
                 throw new RuntimeException("Assigned user is not a dentist");
             }
             appointment.setDentist(dentist);
-        } else {
-            appointment.setDentist(null); // Clear assignment if null
+        }
+
+        if (dto.getServiceId() != null) {
+            Service service = serviceRepository.findById(dto.getServiceId())
+                    .orElseThrow(() -> new RuntimeException("Service not found"));
+            appointment.setService(service);
+        }
+
+        if (!dto.getNotes().equals(appointment.getNotes())) {
+            appointment.setNotes(dto.getNotes());
         }
 
         Appointment saved = appointmentRepository.save(appointment);
 
         String performedBy = SecurityUtils.getCurrentUsername();
         auditLogService.logAction("UPDATE_APPOINTMENT", performedBy, "Updated details for appointment #" + id);
+
+        return new ApiResponse<>("Appointment updated successfully", appointmentMapper.toDto(saved));
+    }
+
+    /*
+     * Update appointment status
+     * */
+    public ApiResponse<AppointmentResponseDto> updateAppointmentStatus(Long id, String status) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        if (status != null) {
+            appointment.setStatus(AppointmentStatus.valueOf(status));
+        }
+
+        Appointment saved = appointmentRepository.save(appointment);
+
+        String performedBy = SecurityUtils.getCurrentUsername();
+        auditLogService.logAction("UPDATE_APPOINTMENT", performedBy, "Updated status for appointment #" + id);
 
         return new ApiResponse<>("Appointment updated successfully", appointmentMapper.toDto(saved));
     }

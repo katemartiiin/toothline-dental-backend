@@ -9,7 +9,7 @@ import com.kjm.toothlinedental.dto.DentistScheduleResponseDto;
 public class DentistScheduleMapper {
 
     public DentistScheduleResponseDto toDto(DentistSchedule schedule) {
-        DentistScheduleResponseDto dto = new DentistScheduleResponseDto();
+        DentistScheduleResponseDto dto = new DentistScheduleResponseDto(schedule);
         dto.setDentistId(schedule.getDentist().getId());
         dto.setStatus(schedule.getStatus());
         dto.setSchedDay(schedule.getSchedDay());

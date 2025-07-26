@@ -1,6 +1,7 @@
 package com.kjm.toothlinedental.dto.appointment;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.kjm.toothlinedental.model.AppointmentStatus;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,7 +19,7 @@ public class AppointmentResponseDto {
     private Long serviceId;
     private LocalDate appointmentDate;
 
-    @JsonFormat(pattern = "hh:mm a")
+//    @JsonFormat(pattern = "hh:mm a")
     private LocalTime appointmentTime;
     private String notes;
 
@@ -26,9 +27,8 @@ public class AppointmentResponseDto {
     private Long dentistId;
     private String dentistName;
 
-
     private String serviceName;
-    private String status;
+    private AppointmentStatus status;
 
     // Getters and setters
     public Long getId() { return id; }
@@ -65,8 +65,8 @@ public class AppointmentResponseDto {
         this.serviceName = serviceName;
     }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public AppointmentStatus getStatus() { return status; }
+    public void setStatus(AppointmentStatus status) { this.status = status; }
 
     public String getDentistName() { return dentistName; }
     public void setDentistName(String dentistName) { this.dentistName = dentistName; }

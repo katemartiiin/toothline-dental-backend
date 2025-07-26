@@ -1,16 +1,14 @@
 package com.kjm.toothlinedental.controller;
 
 import java.util.List;
+
+import com.kjm.toothlinedental.dto.appointment.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.kjm.toothlinedental.common.ApiResponse;
 import com.kjm.toothlinedental.service.AppointmentService;
-import com.kjm.toothlinedental.dto.appointment.AppointmentRequestDto;
-import com.kjm.toothlinedental.dto.appointment.AppointmentResponseDto;
-import com.kjm.toothlinedental.dto.appointment.AppointmentCreateRequestDto;
-import com.kjm.toothlinedental.dto.appointment.AppointmentUpdateRequestDto;
 
 @RestController
 @RequestMapping("/api/admin/appointments")
@@ -54,6 +52,12 @@ public class AdminAppointmentController {
     @PreAuthorize("hasAnyRole('STAFF', 'DENTIST')")
     public ResponseEntity<ApiResponse<AppointmentResponseDto>> updateAppointment(@PathVariable Long id, @RequestBody AppointmentUpdateRequestDto dto) {
         return ResponseEntity.ok(appointmentService.updateAppointment(id, dto));
+    }
+
+    @PatchMapping("/{id}/status")
+    @PreAuthorize("hasAnyRole('STAFF', 'DENTIST')")
+    public ResponseEntity<ApiResponse<AppointmentResponseDto>> updateAppointment(@PathVariable Long id, @RequestParam String status) {
+        return ResponseEntity.ok(appointmentService.updateAppointmentStatus(id, status));
     }
 
     @GetMapping("/archived")
