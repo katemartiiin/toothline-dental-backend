@@ -206,7 +206,7 @@ public class AppointmentService {
         appointmentRepository.save(appointment);
 
         String performedBy = SecurityUtils.getCurrentUsername();
-        String auditMessage = isArchive ? "Archived" : "Restored" + " appointment #" + id;
+        String auditMessage = (isArchive ? "Archived" : "Restored") + " appointment #" + id;
         auditLogService.logAction("ARCHIVE_APPOINTMENT", performedBy, auditMessage);
     }
 

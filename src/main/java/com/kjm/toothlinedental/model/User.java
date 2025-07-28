@@ -20,6 +20,8 @@ public class User {
 
     private String name;
 
+    private boolean locked = false;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -52,7 +54,6 @@ public class User {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -60,10 +61,12 @@ public class User {
     public Role getRole() {
         return role;
     }
-
     public void setRole(Role role) {
         this.role = role;
     }
+
+    public boolean isLocked() { return locked; }
+    public void setLocked(boolean locked) { this.locked = locked; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }

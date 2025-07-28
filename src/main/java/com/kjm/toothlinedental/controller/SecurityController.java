@@ -2,6 +2,8 @@ package com.kjm.toothlinedental.controller;
 
 import java.util.List;
 import java.time.LocalDateTime;
+
+import com.kjm.toothlinedental.dto.AuditLogResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +24,7 @@ public class SecurityController {
 
     // Get all audit logs
     @GetMapping("/audit-logs")
-    public ResponseEntity<List<AuditLog>> getAuditLogs() {
+    public ResponseEntity<List<AuditLogResponseDto>> getAuditLogs() {
         return ResponseEntity.ok(auditLogService.getAllLogs());
     }
 

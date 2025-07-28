@@ -1,6 +1,8 @@
 package com.kjm.toothlinedental.controller;
 
 import java.util.List;
+
+import com.kjm.toothlinedental.dto.PatientNameRequestDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +22,6 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
-    public ResponseEntity<ApiResponse<List<PatientResponseDto>>> getAllPatients() {
-        var data = patientService.getAllPatients();
-        return ResponseEntity.ok(new ApiResponse<>("Patients fetched successfully", data));
-    }
-
     @GetMapping("/{id}/view")
     @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
     public ResponseEntity<ApiResponse<PatientResponseDto>> getPatientById(@PathVariable Long id) {
@@ -39,6 +34,13 @@ public class PatientController {
     public ResponseEntity<ApiResponse<List<PatientResponseDto>>> getArchivedPatients() {
         List<PatientResponseDto> data = patientService.getArchivedPatients();
         return ResponseEntity.ok(new ApiResponse<>("Archived patients fetched successfully", data));
+    }
+
+    @PostMapping("/fetch-all")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
+    public ResponseEntity<ApiResponse<List<PatientResponseDto>>> getAllPatients(@RequestBody PatientNameRequestDto dto) {
+        var data = patientService.getAllPatients(dto.getName());
+        return ResponseEntity.ok(new ApiResponse<>("Patients fetched successfully", data));
     }
 
     @PostMapping("/fetch")

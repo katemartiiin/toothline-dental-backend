@@ -33,9 +33,12 @@ public class ProcedureService {
     /*
     * Fetch all services
     * */
-    public List<ServiceResponseDto> getAllServices() {
-        return serviceRepository.findAll()
-                .stream()
+    public List<ServiceResponseDto> getAllServices(String name) {
+        List<Service> services = (name == null || name.trim().isEmpty())
+                ? serviceRepository.findAll()
+                : serviceRepository.findByNameContainingIgnoreCase(name);
+
+        return services.stream()
                 .map(serviceMapper::toDto)
                 .toList();
     }

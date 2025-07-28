@@ -21,7 +21,8 @@ public class PublicServiceController {
     }
     @GetMapping
     public ResponseEntity<ApiResponse<List<ServiceResponseDto>>> getAllServicesPublic() {
-        var data = procedureService.getAllServices();
+        String name = "";
+        var data = procedureService.getAllServices(name);
         return ResponseEntity.ok(new ApiResponse<>("Services fetched successfully", data));
     }
 }

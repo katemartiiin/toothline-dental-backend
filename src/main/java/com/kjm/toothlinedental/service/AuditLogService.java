@@ -2,6 +2,9 @@ package com.kjm.toothlinedental.service;
 
 import java.util.List;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import com.kjm.toothlinedental.dto.AuditLogResponseDto;
 import org.springframework.stereotype.Service;
 
 import com.kjm.toothlinedental.model.AuditLog;
@@ -25,7 +28,17 @@ public class AuditLogService {
         auditLogRepository.save(log);
     }
 
-    public List<AuditLog> getAllLogs() {
-        return auditLogRepository.findAllByOrderByTimestampDesc();
+    public List<AuditLogResponseDto> getAllLogs() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd hh:mm a");
+
+        return auditLogRepository.findAllByOrderByTimestampDesc()
+                .stream()
+                .map(log -> new AuditLogResponseDto(
+                        log.getId(),
+                        log.getDetails(),
+                        log.getPerformedBy(),
+                        log.getTimestamp().format(formatter).toLowerCase()
+                ))
+                .toList();
     }
 }
