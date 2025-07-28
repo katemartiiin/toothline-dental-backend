@@ -1,6 +1,10 @@
 package com.kjm.toothlinedental.controller;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.kjm.toothlinedental.model.ScheduleDay;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,32 +29,26 @@ public class DentistScheduleController {
         this.dentistScheduleService = dentistScheduleService;
     }
 
-    @PostMapping("/fetch")
+    @GetMapping("/{id}/fetch")
     @PreAuthorize("hasAnyRole('STAFF', 'DENTIST', 'ADMIN')")
-    public ResponseEntity<DentistScheduleFetchResponseDto> fetchDentistSchedules(@RequestBody DentistScheduleRequestDto request) {
-        List<DentistSchedule> dentistSchedules = dentistScheduleService.fetchDentistSchedulesBy(request.getDentistId(),
-                request.getSchedDay());
-
-        DentistScheduleFetchResponseDto dto = new DentistScheduleFetchResponseDto();
-        dto.setDentistSchedules(dentistSchedules);
-
-        return ResponseEntity.ok(dto);
+    public ResponseEntity<Map<ScheduleDay, List<DentistScheduleResponseDto>>> getSchedule(@PathVariable Long id) {
+        return ResponseEntity.ok(dentistScheduleService.getGroupedScheduleWithAllDays(id));
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST', 'STAFF')")
     public ResponseEntity<ApiResponse<DentistScheduleResponseDto>> createDentistSchedule(@RequestBody DentistScheduleRequestDto dto) {
         return ResponseEntity.ok(dentistScheduleService.createDentistSchedule(dto)); // no dentistId
     }
 
     @PutMapping("/{id}/update")
-    @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST', 'STAFF')")
     public ResponseEntity<ApiResponse<DentistScheduleResponseDto>> updateDentistSchedule(@PathVariable Long id, @RequestBody DentistScheduleRequestDto dto) {
         return ResponseEntity.ok(dentistScheduleService.updateDentistSchedule(id, dto));
     }
 
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
+    @DeleteMapping("/{id}/delete")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST', 'STAFF')")
     public ResponseEntity<ApiResponse<Void>> deleteDentistSchedule(@PathVariable Long id) {
         dentistScheduleService.deleteDentistSchedule(id);
         return ResponseEntity.ok(new ApiResponse<>("Schedule deleted successfully", null));

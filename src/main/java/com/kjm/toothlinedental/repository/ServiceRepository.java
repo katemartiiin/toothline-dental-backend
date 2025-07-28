@@ -4,6 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.kjm.toothlinedental.model.Service;
 
+import java.util.List;
+
 public interface ServiceRepository extends JpaRepository<Service, Long> {
-    // Optional: custom methods below
+
+    List<Service> findByNameContainingIgnoreCase(String name);
 }

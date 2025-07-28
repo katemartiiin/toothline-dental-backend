@@ -34,9 +34,12 @@ public class PatientService {
     /*
      * Fetch all patients
      * */
-    public List<PatientResponseDto> getAllPatients() {
-        return patientRepository.findAll()
-                .stream()
+    public List<PatientResponseDto> getAllPatients(String name) {
+        List<Patient> patients = (name == null || name.trim().isEmpty())
+                ? patientRepository.findByArchivedFalse()
+                : patientRepository.findByNameContainingIgnoreCaseAndArchivedFalse(name);
+
+        return patients.stream()
                 .map(patientMapper::toDto)
                 .toList();
     }
@@ -121,7 +124,7 @@ public class PatientService {
         patientRepository.save(patient);
 
         String performedBy = SecurityUtils.getCurrentUsername();
-        String message = isArchive ? "Archived" : "Restored" + " patient #" + id;
+        String message = (isArchive ? "Archived" : "Restored") + " patient #" + id;
         auditLogService.logAction("ARCHIVE_PATIENT", performedBy, message);
     }
 

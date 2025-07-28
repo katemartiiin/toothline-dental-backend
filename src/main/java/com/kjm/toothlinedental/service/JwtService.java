@@ -41,12 +41,15 @@ public class JwtService {
     public String generateToken(User user) {
         return Jwts.builder()
                 .setSubject(user.getEmail())
+                .claim("userId", user.getId())
                 .claim("role", user.getRole().toString())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24 hrs
                 .signWith(SignatureAlgorithm.HS256, Base64.getDecoder().decode(secretKey))
                 .compact();
     }
+
+    public String getUserId(String token) { return extractClaims(token).get("userId").toString(); }
 
     public String getEmail(String token) {
         return extractClaims(token).getSubject();
