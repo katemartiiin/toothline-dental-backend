@@ -4,12 +4,16 @@ import com.kjm.toothlinedental.model.Role;
 
 public class AdminUpdateUserRequestDto {
 
-    private Role role;                 // optional
-    private Boolean resetPassword;
+    private String role;                 // optional
+    private boolean resetPassword;
+    private boolean locked;
 
-    public Role getRole() { return role; }
-    public void setRole(Role role) { this.role = role; }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
-    public Boolean getResetPassword() { return resetPassword; }
-    public void setResetPassword(Boolean resetPassword) { this.resetPassword = resetPassword; }
+    public boolean isResetPassword() { return resetPassword; }
+    public void setResetPassword(boolean resetPassword) { this.resetPassword = resetPassword; }
+
+    public boolean isLocked() { return locked; }
+    public void setLocked(boolean locked) { this.locked = locked; }
 }

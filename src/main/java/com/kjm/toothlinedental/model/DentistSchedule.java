@@ -15,14 +15,15 @@ public class DentistSchedule {
     @JoinColumn(name = "dentist_id", nullable = true)
     private User dentist;
 
-    private String schedDay;
+    @Enumerated(EnumType.STRING)
+    private ScheduleDay schedDay;
+
     private LocalTime startTime;
     private LocalTime endTime;
     private String status = "AVAILABLE";
 
     @Column(updatable = false)
     private LocalDateTime createdAt;
-
     private LocalDateTime updatedAt;
 
     @PrePersist
@@ -43,8 +44,8 @@ public class DentistSchedule {
     public User getDentist() { return dentist; }
     public void setDentist(User dentist) { this.dentist = dentist; }
 
-    public String getSchedDay() { return schedDay; }
-    public void setSchedDay(String schedDay) { this.schedDay = schedDay; }
+    public ScheduleDay getSchedDay() { return schedDay; }
+    public void setSchedDay(ScheduleDay schedDay) { this.schedDay = schedDay; }
 
     public LocalTime getStartTime() { return startTime; }
     public void setStartTime(LocalTime startTime) { this.startTime = startTime; }

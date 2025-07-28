@@ -1,20 +1,25 @@
 package com.kjm.toothlinedental.dto;
 
+import com.kjm.toothlinedental.model.ScheduleDay;
+
 import java.time.LocalTime;
 
 public class DentistScheduleRequestDto {
 
+    private Long id;
     private Long dentistId;
-    private String schedDay;
+    private ScheduleDay schedDay;
     private LocalTime startTime;
     private LocalTime endTime;
     private String status;
 
+    public Long getId() { return id; }    public void setId(Long id) { this.id = id; }
+
     public Long getDentistId() { return dentistId; }
     public void setDentistId(Long dentistId) { this.dentistId = dentistId; }
 
-    public String getSchedDay() { return schedDay; }
-    public void setSchedDay(String schedDay) { this.schedDay = schedDay; }
+    public ScheduleDay getSchedDay() { return schedDay; }
+    public void setSchedDay(ScheduleDay schedDay) { this.schedDay = schedDay; }
 
     public LocalTime getStartTime() { return startTime; }
     public void setStartTime(LocalTime startTime) { this.startTime = startTime; }

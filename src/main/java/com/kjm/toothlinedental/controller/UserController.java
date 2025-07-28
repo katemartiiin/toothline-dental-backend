@@ -51,6 +51,13 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(user.getId()));
     }
 
+    // Get users by role
+    @GetMapping("/role")
+    @PreAuthorize("hasAnyRole('STAFF', 'DENTIST', 'ADMIN')")
+    public ResponseEntity<List<UserResponseDto>> getUsersByRole(@RequestParam String role) {
+        return ResponseEntity.ok(userService.getUsersByRole(role));
+    }
+
     // Create user - admin only
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")

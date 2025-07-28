@@ -22,7 +22,7 @@ public class AppointmentRepositoryImpl implements AppointmentRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public List<Appointment> findFilteredAppointments(Long dentistId, String patientName, LocalDate appointmentDate) {
+    public List<Appointment> findFilteredAppointments(Long serviceId, String patientName, LocalDate appointmentDate, Long dentistId) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Appointment> query = cb.createQuery(Appointment.class);
         Root<Appointment> root = query.from(Appointment.class);
@@ -33,6 +33,10 @@ public class AppointmentRepositoryImpl implements AppointmentRepositoryCustom {
 
         if (dentistId != null) {
             predicates.add(cb.equal(root.get("dentist").get("id"), dentistId));
+        }
+
+        if (serviceId != null) {
+            predicates.add(cb.equal(root.get("service").get("id"), serviceId));
         }
 
         if (patientName != null && !patientName.isBlank()) {

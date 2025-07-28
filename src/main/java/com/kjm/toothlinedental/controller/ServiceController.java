@@ -1,6 +1,8 @@
 package com.kjm.toothlinedental.controller;
 
 import java.util.List;
+
+import com.kjm.toothlinedental.dto.ServiceNameRequestDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,18 +22,18 @@ public class ServiceController {
         this.procedureService = procedureService;
     }
 
-    @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
-    public ResponseEntity<ApiResponse<List<ServiceResponseDto>>> getAllServices() {
-        var data = procedureService.getAllServices();
-        return ResponseEntity.ok(new ApiResponse<>("Services fetched successfully", data));
-    }
-
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/view")
     @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
     public ResponseEntity<ApiResponse<ServiceResponseDto>> getServiceById(@PathVariable Long id) {
         var data = procedureService.getServiceById(id);
         return ResponseEntity.ok(new ApiResponse<>("Service fetched successfully", data));
+    }
+
+    @PostMapping("/fetch")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
+    public ResponseEntity<ApiResponse<List<ServiceResponseDto>>> getAllServices(@RequestBody ServiceNameRequestDto dto) {
+        var data = procedureService.getAllServices(dto.getName());
+        return ResponseEntity.ok(new ApiResponse<>("Services fetched successfully", data));
     }
 
     @PostMapping
@@ -46,7 +48,7 @@ public class ServiceController {
         return ResponseEntity.ok(procedureService.updateService(id, dto));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/delete")
     @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
     public ResponseEntity<ApiResponse<Void>> deleteService(@PathVariable Long id) {
         procedureService.deleteService(id);

@@ -1,16 +1,14 @@
 package com.kjm.toothlinedental.controller;
 
 import java.util.List;
+
+import com.kjm.toothlinedental.dto.appointment.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.kjm.toothlinedental.common.ApiResponse;
 import com.kjm.toothlinedental.service.AppointmentService;
-import com.kjm.toothlinedental.dto.appointment.AppointmentRequestDto;
-import com.kjm.toothlinedental.dto.appointment.AppointmentResponseDto;
-import com.kjm.toothlinedental.dto.appointment.AppointmentCreateRequestDto;
-import com.kjm.toothlinedental.dto.appointment.AppointmentUpdateRequestDto;
 
 @RestController
 @RequestMapping("/api/admin/appointments")
@@ -31,11 +29,14 @@ public class AdminAppointmentController {
 
     @PostMapping("/fetch")
     @PreAuthorize("hasAnyRole('STAFF', 'DENTIST', 'ADMIN')")
-    public ResponseEntity<List<AppointmentResponseDto>> fetchAppointments(@RequestBody AppointmentRequestDto request) {
+    public ResponseEntity<List<AppointmentResponseDto>> fetchAppointments(@RequestHeader("Authorization") String authHeader,
+                                                                          @RequestBody AppointmentRequestDto request) {
+        String token = authHeader.replace("Bearer ", "");
         List<AppointmentResponseDto> results = appointmentService.fetchAppointmentsBy(
-                request.getDentistId(),
+                request.getServiceId(),
                 request.getPatientName(),
-                request.getAppointmentDate()
+                request.getAppointmentDate(),
+                token
         );
         return ResponseEntity.ok(results);
     }
@@ -51,6 +52,12 @@ public class AdminAppointmentController {
     @PreAuthorize("hasAnyRole('STAFF', 'DENTIST')")
     public ResponseEntity<ApiResponse<AppointmentResponseDto>> updateAppointment(@PathVariable Long id, @RequestBody AppointmentUpdateRequestDto dto) {
         return ResponseEntity.ok(appointmentService.updateAppointment(id, dto));
+    }
+
+    @PatchMapping("/{id}/status")
+    @PreAuthorize("hasAnyRole('STAFF', 'DENTIST')")
+    public ResponseEntity<ApiResponse<AppointmentResponseDto>> updateAppointment(@PathVariable Long id, @RequestParam String status) {
+        return ResponseEntity.ok(appointmentService.updateAppointmentStatus(id, status));
     }
 
     @GetMapping("/archived")

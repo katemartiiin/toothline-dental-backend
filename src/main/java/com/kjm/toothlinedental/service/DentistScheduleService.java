@@ -1,6 +1,9 @@
 package com.kjm.toothlinedental.service;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import com.kjm.toothlinedental.model.ScheduleDay;
 import org.springframework.stereotype.Service;
 
 import com.kjm.toothlinedental.repository.*;
@@ -66,6 +69,26 @@ public class DentistScheduleService {
     public List<DentistSchedule> fetchDentistSchedulesBy(Long dentistId, String schedDay) {
         return dentistScheduleRepository.findFilteredDentistSchedules(dentistId, schedDay);
     }
+
+    public Map<ScheduleDay, List<DentistScheduleResponseDto>> getGroupedScheduleWithAllDays(Long dentistId) {
+        List<DentistSchedule> entities = dentistScheduleRepository.findByDentistId(dentistId);
+
+        List<DentistScheduleResponseDto> dtos = entities.stream()
+                .map(DentistScheduleResponseDto::new)
+                .collect(Collectors.toList());
+
+        Map<ScheduleDay, List<DentistScheduleResponseDto>> grouped = dtos.stream()
+                .collect(Collectors.groupingBy(DentistScheduleResponseDto::getSchedDay));
+
+        // Ensure all days are present
+        Map<ScheduleDay, List<DentistScheduleResponseDto>> result = new LinkedHashMap<>();
+        for (ScheduleDay day : ScheduleDay.values()) {
+            result.put(day, grouped.getOrDefault(day, new ArrayList<>()));
+        }
+
+        return result;
+    }
+
 
     public ApiResponse<DentistScheduleResponseDto> updateDentistSchedule(Long id, DentistScheduleRequestDto dto) {
         DentistSchedule schedule = dentistScheduleRepository.findById(id)
