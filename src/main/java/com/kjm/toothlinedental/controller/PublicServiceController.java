@@ -1,7 +1,7 @@
 package com.kjm.toothlinedental.controller;
 
 import com.kjm.toothlinedental.common.ApiResponse;
-import com.kjm.toothlinedental.dto.ServiceResponseDto;
+import com.kjm.toothlinedental.dto.service.ServiceResponseDto;
 import com.kjm.toothlinedental.service.ProcedureService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

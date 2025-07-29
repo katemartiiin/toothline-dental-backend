@@ -1,6 +1,6 @@
-package com.kjm.toothlinedental.dto;
+package com.kjm.toothlinedental.dto.patient;
 
-public class ServiceNameRequestDto {
+public class PatientNameRequestDto {
 
     private String name;
 

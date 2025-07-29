@@ -2,14 +2,16 @@ package com.kjm.toothlinedental.controller;
 
 import java.util.List;
 
-import com.kjm.toothlinedental.dto.PatientNameRequestDto;
+import com.kjm.toothlinedental.dto.patient.PatientCreateRequestDto;
+import com.kjm.toothlinedental.dto.patient.PatientNameRequestDto;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.kjm.toothlinedental.common.ApiResponse;
-import com.kjm.toothlinedental.dto.PatientRequestDto;
-import com.kjm.toothlinedental.dto.PatientResponseDto;
+import com.kjm.toothlinedental.dto.patient.PatientRequestDto;
+import com.kjm.toothlinedental.dto.patient.PatientResponseDto;
 import com.kjm.toothlinedental.service.PatientService;
 
 @RestController
@@ -52,7 +54,8 @@ public class PatientController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
-    public ResponseEntity<ApiResponse<PatientResponseDto>> createPatient(@RequestBody PatientRequestDto dto) {
+    public ResponseEntity<ApiResponse<PatientResponseDto>> createPatient(
+            @Valid @RequestBody PatientCreateRequestDto dto) {
         return ResponseEntity.ok(patientService.createPatient(dto));
     }
 

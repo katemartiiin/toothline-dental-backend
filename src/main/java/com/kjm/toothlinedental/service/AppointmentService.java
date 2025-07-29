@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.kjm.toothlinedental.exception.BadRequestException;
+import com.kjm.toothlinedental.exception.ResourceNotFoundException;
 import com.kjm.toothlinedental.model.*;
 
 import com.kjm.toothlinedental.common.ApiResponse;
@@ -78,7 +80,7 @@ public class AppointmentService {
         Appointment appointment = new Appointment();
         appointment.setPatient(patient);
         appointment.setService(serviceRepository.findById(dto.getServiceId())
-                .orElseThrow(() -> new RuntimeException("Service not found")));
+                .orElseThrow(() -> new ResourceNotFoundException("Service not found with ID: " + dto.getServiceId())));
         appointment.setNotes(dto.getNotes());
         appointment.setAppointmentDate(dto.getAppointmentDate());
         appointment.setAppointmentTime(dto.getAppointmentTime());
@@ -86,9 +88,9 @@ public class AppointmentService {
         // Set dentist if provided
         if (dto.getDentistId() != null) {
             User dentist = userRepository.findById(dto.getDentistId())
-                    .orElseThrow(() -> new RuntimeException("Dentist not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Dentist not found with ID: " + dto.getDentistId()));
             if (!dentist.getRole().equals(Role.DENTIST)) {
-                throw new IllegalArgumentException("Assigned user must be a dentist.");
+                throw new BadRequestException("Assigned user must be a dentist.");
             }
             appointment.setDentist(dentist);
             appointment.setStatus(AppointmentStatus.CONFIRMED);
@@ -99,7 +101,7 @@ public class AppointmentService {
         Appointment saved = appointmentRepository.save(appointment);
         AppointmentResponseDto responseDto = appointmentMapper.toDto(saved);
 
-        return new ApiResponse<>("Appointment created successfully", responseDto);
+        return new ApiResponse<>("Appointment created successfully.", responseDto);
     }
     /*
     * Fetch Appointments
@@ -128,7 +130,7 @@ public class AppointmentService {
     * */
     public AppointmentResponseDto getAppointmentById(Long id) {
         Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Appointment not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Appointment not found with ID: " + id));
 
         return appointmentMapper.toDto(appointment);
     }
@@ -138,7 +140,7 @@ public class AppointmentService {
     * */
     public ApiResponse<AppointmentResponseDto> updateAppointment(Long id, AppointmentUpdateRequestDto dto) {
         Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Appointment not found with ID: " + id));
 
         if (dto.getAppointmentDate() != null) {
             appointment.setAppointmentDate(dto.getAppointmentDate());
@@ -154,16 +156,16 @@ public class AppointmentService {
 
         if (dto.getDentistId() != null) {
             User dentist = userRepository.findById(dto.getDentistId())
-                    .orElseThrow(() -> new RuntimeException("Dentist not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Dentist not found with ID: " + dto.getDentistId()));
             if (!dentist.getRole().equals(Role.DENTIST)) {
-                throw new RuntimeException("Assigned user is not a dentist");
+                throw new BadRequestException("Assigned user is not a dentist.");
             }
             appointment.setDentist(dentist);
         }
 
         if (dto.getServiceId() != null) {
             Service service = serviceRepository.findById(dto.getServiceId())
-                    .orElseThrow(() -> new RuntimeException("Service not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Service not found with ID: " + dto.getServiceId()));
             appointment.setService(service);
         }
 
@@ -176,7 +178,7 @@ public class AppointmentService {
         String performedBy = SecurityUtils.getCurrentUsername();
         auditLogService.logAction("UPDATE_APPOINTMENT", performedBy, "Updated details for appointment #" + id);
 
-        return new ApiResponse<>("Appointment updated successfully", appointmentMapper.toDto(saved));
+        return new ApiResponse<>("Appointment #" + id + " updated successfully.", appointmentMapper.toDto(saved));
     }
 
     /*
@@ -184,7 +186,7 @@ public class AppointmentService {
      * */
     public ApiResponse<AppointmentResponseDto> updateAppointmentStatus(Long id, String status) {
         Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Appointment not found with ID: " + id));
 
         if (status != null) {
             appointment.setStatus(AppointmentStatus.valueOf(status));
@@ -195,12 +197,12 @@ public class AppointmentService {
         String performedBy = SecurityUtils.getCurrentUsername();
         auditLogService.logAction("UPDATE_APPOINTMENT", performedBy, "Updated status for appointment #" + id);
 
-        return new ApiResponse<>("Appointment updated successfully", appointmentMapper.toDto(saved));
+        return new ApiResponse<>("Appointment #" + id +" updated successfully", appointmentMapper.toDto(saved));
     }
 
     public void toggleArchiveAppointment(Long id, boolean isArchive) {
         Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Appointment not found with ID: " + id));
 
         appointment.setArchived(isArchive);
         appointmentRepository.save(appointment);

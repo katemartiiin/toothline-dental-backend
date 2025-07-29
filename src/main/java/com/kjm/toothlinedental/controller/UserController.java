@@ -1,12 +1,14 @@
 package com.kjm.toothlinedental.controller;
 
 import java.util.List;
+
+import com.kjm.toothlinedental.dto.user.*;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
-import com.kjm.toothlinedental.dto.*;
 import com.kjm.toothlinedental.model.User;
 import com.kjm.toothlinedental.common.ApiResponse;
 import com.kjm.toothlinedental.service.UserService;
@@ -61,7 +63,8 @@ public class UserController {
     // Create user - admin only
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<UserCreateResponseDto>> createUser(@RequestBody UserRequestDto dto) {
+    public ResponseEntity<ApiResponse<UserCreateResponseDto>> createUser(
+            @Valid @RequestBody UserCreateRequestDto dto) {
         return ResponseEntity.ok(userService.createUser(dto));
     }
 
@@ -69,7 +72,7 @@ public class UserController {
     @PutMapping("/me")
     public ResponseEntity<ApiResponse<UserProfileResponseDto>> updateUserProfile(
             @AuthenticationPrincipal String email,
-            @RequestBody UserRequestDto dto) {
+            @RequestBody UserUpdateRequestDto dto) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));

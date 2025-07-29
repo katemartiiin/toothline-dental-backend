@@ -3,6 +3,7 @@ package com.kjm.toothlinedental.controller;
 import java.util.List;
 
 import com.kjm.toothlinedental.dto.appointment.*;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +24,8 @@ public class AdminAppointmentController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'DENTIST')")
-    public ResponseEntity<ApiResponse<AppointmentResponseDto>> createAppointmentAsAdmin(@RequestBody AppointmentCreateRequestDto dto) {
+    public ResponseEntity<ApiResponse<AppointmentResponseDto>> createAppointmentAsAdmin(
+            @Valid @RequestBody AppointmentCreateRequestDto dto) {
         return ResponseEntity.ok(appointmentService.createAppointment(dto));
     }
 

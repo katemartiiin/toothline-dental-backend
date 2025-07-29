@@ -1,23 +1,38 @@
 package com.kjm.toothlinedental.dto.appointment;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class AppointmentCreateRequestDto {
 
     // Patient info (used to find or create the patient)
+    @NotBlank(message = "Patient Name is required.")
     private String name;
+
+    @NotBlank(message = "Email is required.")
+    @Email(message = "Email format is invalid.")
     private String email;
+
+    @NotBlank(message = "Phone number is required.")
     private String phoneNumber;
 
     // Appointment info
+    @NotNull(message = "Please select a service.")
     private Long serviceId;
-    private LocalDate appointmentDate;
-    private LocalTime appointmentTime;
-    private String notes;
 
-    // Optional for admin/staff
-    private Long dentistId;
+    @NotNull(message = "Appointment date is required.")
+    private LocalDate appointmentDate;
+
+    @NotNull(message = "Appointment time is required.")
+    private LocalTime appointmentTime;
+
+    // Optional fields
+    private String notes;
+    private Long dentistId; // can be assigned in admin side
 
     // Getters and setters
     public String getName() { return name; }

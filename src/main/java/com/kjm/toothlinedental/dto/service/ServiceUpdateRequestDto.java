@@ -1,6 +1,6 @@
-package com.kjm.toothlinedental.dto;
+package com.kjm.toothlinedental.dto.service;
 
-public class ServiceRequestDto {
+public class ServiceUpdateRequestDto {
 
     private String name;
     private String description;

@@ -3,7 +3,7 @@ package com.kjm.toothlinedental.mapper;
 import org.springframework.stereotype.Component;
 
 import com.kjm.toothlinedental.model.Service;
-import com.kjm.toothlinedental.dto.ServiceResponseDto;
+import com.kjm.toothlinedental.dto.service.ServiceResponseDto;
 
 @Component
 public class ServiceMapper {

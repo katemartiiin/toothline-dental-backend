@@ -10,7 +10,6 @@ public class LoginResponseDto {
     public String getToken() {
         return token;
     }
-
     public void setToken(String token) {
         this.token = token;
     }
@@ -18,7 +17,6 @@ public class LoginResponseDto {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -26,7 +24,6 @@ public class LoginResponseDto {
     public Role getRole() {
         return role;
     }
-
     public void setRole(Role role) {
         this.role = role;
     }

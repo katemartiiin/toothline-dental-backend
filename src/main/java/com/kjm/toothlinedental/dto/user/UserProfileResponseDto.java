@@ -1,4 +1,4 @@
-package com.kjm.toothlinedental.dto;
+package com.kjm.toothlinedental.dto.user;
 
 public class UserProfileResponseDto {
 

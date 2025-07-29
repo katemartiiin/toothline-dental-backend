@@ -1,6 +1,8 @@
 package com.kjm.toothlinedental.controller;
 
 import java.util.List;
+
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +28,8 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<AppointmentResponseDto>> createAppointment(@RequestBody AppointmentCreateRequestDto dto) {
+    public ResponseEntity<ApiResponse<AppointmentResponseDto>> createAppointment(
+            @Valid @RequestBody AppointmentCreateRequestDto dto) {
         return ResponseEntity.ok(appointmentService.createAppointment(dto)); // no dentistId
     }
 

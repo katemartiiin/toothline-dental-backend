@@ -1,8 +1,12 @@
 package com.kjm.toothlinedental.controller;
 
 import java.util.Optional;
+
+import com.kjm.toothlinedental.exception.BadRequestException;
+import com.kjm.toothlinedental.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,11 +40,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto request) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto request) {
         Optional<User> userOpt = userRepository.findByEmail(request.getEmail());
 
         if (userOpt.isEmpty() || !passwordEncoder.matches(request.getPassword(), userOpt.get().getPassword())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            System.out.println("Throwing UnauthorizedException");
+            throw new UnauthorizedException("Invalid credentials");
         }
 
         User user = userOpt.get();
@@ -62,13 +67,13 @@ public class AuthController {
             String token = header.substring(7);
 
             if (!jwtService.isTokenValid(token)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+                throw new UnauthorizedException("Invalid token");
             }
 
             blacklistService.blacklist(token);
             return ResponseEntity.ok("Logged out successfully");
         }
 
-        return ResponseEntity.badRequest().body("Missing token");
+        throw new BadRequestException("Missing token");
     }
 }
