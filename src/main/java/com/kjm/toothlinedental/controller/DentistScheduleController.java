@@ -51,6 +51,6 @@ public class DentistScheduleController {
     @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST', 'STAFF')")
     public ResponseEntity<ApiResponse<Void>> deleteDentistSchedule(@PathVariable Long id) {
         dentistScheduleService.deleteDentistSchedule(id);
-        return ResponseEntity.ok(new ApiResponse<>("Schedule deleted successfully", null));
+        return ResponseEntity.ok(new ApiResponse<>("Dentist Schedule #"+id+" deleted successfully", null));
     }
 }

@@ -77,8 +77,8 @@ public class AdminAppointmentController {
 
         appointmentService.toggleArchiveAppointment(id, archived);
         String message = archived
-                ? "Appointment archived successfully"
-                : "Appointment restored successfully";
+                ? "Appointment #"+id+" archived successfully."
+                : "Appointment #"+id+" restored successfully.";
 
         return ResponseEntity.ok(new ApiResponse<>(message, null));
     }

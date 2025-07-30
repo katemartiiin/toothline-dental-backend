@@ -197,7 +197,7 @@ public class AppointmentService {
         String performedBy = SecurityUtils.getCurrentUsername();
         auditLogService.logAction("UPDATE_APPOINTMENT", performedBy, "Updated status for appointment #" + id);
 
-        return new ApiResponse<>("Appointment #" + id +" updated successfully", appointmentMapper.toDto(saved));
+        return new ApiResponse<>("Appointment #" + id +" is now " + saved.getStatus() + ".", appointmentMapper.toDto(saved));
     }
 
     public void toggleArchiveAppointment(Long id, boolean isArchive) {

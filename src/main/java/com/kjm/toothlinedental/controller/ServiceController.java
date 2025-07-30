@@ -55,6 +55,6 @@ public class ServiceController {
     @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
     public ResponseEntity<ApiResponse<Void>> deleteService(@PathVariable Long id) {
         procedureService.deleteService(id);
-        return ResponseEntity.ok(new ApiResponse<>("Service deleted successfully", null));
+        return ResponseEntity.ok(new ApiResponse<>("Service #"+id+" deleted successfully", null));
     }
 }
