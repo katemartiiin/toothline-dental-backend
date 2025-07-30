@@ -53,13 +53,6 @@ public class AppointmentService {
         this.auditLogService = auditLogService;
         this.jwtService = jwtService;
     }
-    // validate if selected User is a dentist
-    public void assignDentist(Appointment appointment, User user) {
-        if (!user.getRole().equals(Role.DENTIST)) {
-            throw new IllegalArgumentException("Assigned user must be a DENTIST.");
-        }
-        appointment.setDentist(user);
-    }
 
     /*
     * Create Appointment - used by Website Form and Admin System

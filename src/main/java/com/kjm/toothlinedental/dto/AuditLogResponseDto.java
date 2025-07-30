@@ -2,12 +2,14 @@ package com.kjm.toothlinedental.dto;
 
 public class AuditLogResponseDto {
     private Long id;
+    private String action;
     private String details;
     private String performedBy;
     private String timestamp;
 
-    public AuditLogResponseDto(Long id, String details, String performedBy, String timestamp) {
+    public AuditLogResponseDto(Long id, String action, String details, String performedBy, String timestamp) {
         this.id = id;
+        this.action = action;
         this.details = details;
         this.performedBy = performedBy;
         this.timestamp = timestamp;
@@ -15,6 +17,9 @@ public class AuditLogResponseDto {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
+    public String getAction() { return action; }
+    public void setAction(String action) { this.action = action; }
 
     public String getDetails() { return details; }
     public void setDetails(String details) { this.details = details; }
