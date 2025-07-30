@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.kjm.toothlinedental.dto.schedule.DentistScheduleCreateRequestDto;
+import com.kjm.toothlinedental.dto.schedule.DentistScheduleMyCreateRequestDto;
 import com.kjm.toothlinedental.model.ScheduleDay;
+import com.kjm.toothlinedental.service.JwtService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +24,13 @@ import com.kjm.toothlinedental.repository.DentistScheduleRepository;
 public class DentistScheduleController {
 
     private final DentistScheduleService dentistScheduleService;
+    private final JwtService jwtService;
 
     public DentistScheduleController(DentistScheduleRepository dentistScheduleRepository,
-                                     DentistScheduleService dentistScheduleService) {
+                                     DentistScheduleService dentistScheduleService,
+                                     JwtService jwtService) {
         this.dentistScheduleService = dentistScheduleService;
+        this.jwtService = jwtService;
     }
 
     @GetMapping("/{id}/fetch")
@@ -34,11 +39,29 @@ public class DentistScheduleController {
         return ResponseEntity.ok(dentistScheduleService.getGroupedScheduleWithAllDays(id));
     }
 
+    @GetMapping("/me/fetch")
+    @PreAuthorize("hasRole('DENTIST')")
+    public ResponseEntity<Map<ScheduleDay, List<DentistScheduleResponseDto>>> getOwnSchedule(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        Long dentistId = Long.valueOf(jwtService.getUserId(token));
+        return ResponseEntity.ok(dentistScheduleService.getGroupedScheduleWithAllDays(dentistId));
+    }
+
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST', 'STAFF')")
     public ResponseEntity<ApiResponse<DentistScheduleResponseDto>> createDentistSchedule(
             @Valid @RequestBody DentistScheduleCreateRequestDto dto) {
-        return ResponseEntity.ok(dentistScheduleService.createDentistSchedule(dto)); // no dentistId
+        return ResponseEntity.ok(dentistScheduleService.createDentistSchedule(dto));
+    }
+
+    @PostMapping("/me")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST', 'STAFF')")
+    public ResponseEntity<ApiResponse<DentistScheduleResponseDto>> createMyDentistSchedule(
+            @RequestHeader("Authorization") String authHeader,
+            @Valid @RequestBody DentistScheduleMyCreateRequestDto dto) {
+        String token = authHeader.replace("Bearer ", "");
+        Long dentistId = Long.valueOf(jwtService.getUserId(token));
+        return ResponseEntity.ok(dentistScheduleService.createMyDentistSchedule(dto, dentistId));
     }
 
     @PutMapping("/{id}/update")
