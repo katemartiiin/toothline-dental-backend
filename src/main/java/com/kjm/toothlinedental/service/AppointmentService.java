@@ -91,6 +91,14 @@ public class AppointmentService {
             appointment.setStatus(AppointmentStatus.PENDING);
         }
 
+        if (dto.getTreatmentPlan() != null && !dto.getTreatmentPlan().isBlank()) {
+            appointment.setTreatmentPlan(dto.getTreatmentPlan());
+        }
+
+        if (dto.getPaidAmount() != null) {
+            appointment.setPaidAmount(dto.getPaidAmount());
+        }
+
         Appointment saved = appointmentRepository.save(appointment);
         AppointmentResponseDto responseDto = appointmentMapper.toDto(saved);
 
@@ -164,6 +172,14 @@ public class AppointmentService {
 
         if (!dto.getNotes().equals(appointment.getNotes())) {
             appointment.setNotes(dto.getNotes());
+        }
+
+        if (dto.getTreatmentPlan() != null && !dto.getTreatmentPlan().isEmpty()) {
+            appointment.setTreatmentPlan(dto.getTreatmentPlan());
+        }
+
+        if (dto.getPaidAmount() != null) {
+            appointment.setPaidAmount(dto.getPaidAmount());
         }
 
         Appointment saved = appointmentRepository.save(appointment);

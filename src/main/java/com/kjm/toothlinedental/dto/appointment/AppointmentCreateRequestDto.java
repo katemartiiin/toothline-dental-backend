@@ -34,6 +34,9 @@ public class AppointmentCreateRequestDto {
     private String notes;
     private Long dentistId; // can be assigned in admin side
 
+    private String treatmentPlan;
+    private Double paidAmount;
+
     // Getters and setters
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -58,4 +61,10 @@ public class AppointmentCreateRequestDto {
 
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
+
+    public String getTreatmentPlan() { return treatmentPlan; }
+    public void setTreatmentPlan(String treatmentPlan) { this.treatmentPlan = treatmentPlan; }
+
+    public Double getPaidAmount() { return paidAmount; }
+    public void setPaidAmount(Double paidAmount) { this.paidAmount = paidAmount; }
 }
