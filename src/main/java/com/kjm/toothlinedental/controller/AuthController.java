@@ -44,11 +44,15 @@ public class AuthController {
         Optional<User> userOpt = userRepository.findByEmail(request.getEmail());
 
         if (userOpt.isEmpty() || !passwordEncoder.matches(request.getPassword(), userOpt.get().getPassword())) {
-            System.out.println("Throwing UnauthorizedException");
             throw new UnauthorizedException("Invalid credentials");
         }
 
         User user = userOpt.get();
+
+        if (user.isLocked()) {
+            throw new UnauthorizedException("Your account is locked.");
+        }
+
         String token = jwtService.generateToken(user);
 
         LoginResponseDto response = new LoginResponseDto();
