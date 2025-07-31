@@ -1,4 +1,4 @@
-package com.kjm.toothlinedental.repository;
+package com.kjm.toothlinedental.repository.schedule;
 
 import java.util.List;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.kjm.toothlinedental.dto;
+package com.kjm.toothlinedental.dto.service;
 
 public class ServiceResponseDto {
 

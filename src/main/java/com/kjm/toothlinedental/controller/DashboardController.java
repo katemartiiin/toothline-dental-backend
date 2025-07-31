@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.kjm.toothlinedental.model.Appointment;
 import com.kjm.toothlinedental.dto.DashboardRequestDto;
 import com.kjm.toothlinedental.repository.PatientRepository;
-import com.kjm.toothlinedental.repository.AppointmentRepository;
+import com.kjm.toothlinedental.repository.appointment.AppointmentRepository;
 
 @RestController
 @RequestMapping("/api/admin/dashboard")

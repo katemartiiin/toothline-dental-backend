@@ -1,8 +1,6 @@
-package com.kjm.toothlinedental.dto;
+package com.kjm.toothlinedental.dto.user;
 
-import com.kjm.toothlinedental.model.Role;
-
-public class UserRequestDto {
+public class UserUpdateRequestDto {
 
     private String email;
     private String password;

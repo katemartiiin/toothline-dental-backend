@@ -3,7 +3,9 @@ package com.kjm.toothlinedental.controller;
 import java.util.List;
 import java.time.LocalDateTime;
 
+import com.kjm.toothlinedental.dto.AuditLogFetchRequestDto;
 import com.kjm.toothlinedental.dto.AuditLogResponseDto;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,16 +25,13 @@ public class SecurityController {
     }
 
     // Get all audit logs
-    @GetMapping("/audit-logs")
-    public ResponseEntity<List<AuditLogResponseDto>> getAuditLogs() {
-        return ResponseEntity.ok(auditLogService.getAllLogs());
-    }
-
-    // Manually create an audit log
     @PostMapping("/audit-logs")
-    public ResponseEntity<String> createAuditLog(@RequestBody AuditLog log) {
-        log.setTimestamp(LocalDateTime.now());
-        auditLogService.logAction(log.getAction(), log.getPerformedBy(), log.getDetails());
-        return ResponseEntity.ok("Audit log created.");
+    public ResponseEntity<Page<AuditLogResponseDto>> getAuditLogs(@RequestBody AuditLogFetchRequestDto dto) {
+        return ResponseEntity.ok(auditLogService.getAllLogs(dto));
+    }
+    // Get latest audit logs
+    @GetMapping("/audit-logs/latest")
+    public ResponseEntity<List<AuditLogResponseDto>> getLatestAuditLogs() {
+        return ResponseEntity.ok(auditLogService.getLatestLogs());
     }
 }

@@ -22,6 +22,8 @@ public class AppointmentMapper {
         dto.setAppointmentDate(appointment.getAppointmentDate());
         dto.setAppointmentTime(appointment.getAppointmentTime());
         dto.setDentistName(appointment.getDentist() != null ? appointment.getDentist().getName() : null);
+        dto.setTreatmentPlan(appointment.getTreatmentPlan() != null ? appointment.getTreatmentPlan() : null);
+        dto.setPaidAmount(appointment.getPaidAmount() != null ? appointment.getPaidAmount() : null);
         return dto;
     }
 }
