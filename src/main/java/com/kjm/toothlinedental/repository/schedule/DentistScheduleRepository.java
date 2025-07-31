@@ -1,4 +1,4 @@
-package com.kjm.toothlinedental.repository;
+package com.kjm.toothlinedental.repository.schedule;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

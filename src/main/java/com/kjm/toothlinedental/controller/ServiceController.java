@@ -5,6 +5,9 @@ import java.util.List;
 import com.kjm.toothlinedental.dto.service.ServiceCreateRequestDto;
 import com.kjm.toothlinedental.dto.service.ServiceNameRequestDto;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,9 +36,9 @@ public class ServiceController {
 
     @PostMapping("/fetch")
     @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
-    public ResponseEntity<ApiResponse<List<ServiceResponseDto>>> getAllServices(@RequestBody ServiceNameRequestDto dto) {
-        var data = procedureService.getAllServices(dto.getName());
-        return ResponseEntity.ok(new ApiResponse<>("Services fetched successfully", data));
+    public ResponseEntity<Page<ServiceResponseDto>> getAllServices(@RequestBody ServiceNameRequestDto dto) {
+        Pageable pageable = PageRequest.of(dto.getPage(), dto.getSize());
+        return ResponseEntity.ok(procedureService.getAllServices(dto.getName(), pageable));
     }
 
     @PostMapping

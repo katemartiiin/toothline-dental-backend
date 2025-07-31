@@ -16,7 +16,7 @@ import com.kjm.toothlinedental.common.ApiResponse;
 import com.kjm.toothlinedental.service.DentistScheduleService;
 import com.kjm.toothlinedental.dto.schedule.DentistScheduleUpdateRequestDto;
 import com.kjm.toothlinedental.dto.schedule.DentistScheduleResponseDto;
-import com.kjm.toothlinedental.repository.DentistScheduleRepository;
+import com.kjm.toothlinedental.repository.schedule.DentistScheduleRepository;
 
 @RestController
 @RequestMapping("/api/admin/schedules")

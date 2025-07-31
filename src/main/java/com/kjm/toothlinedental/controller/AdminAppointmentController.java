@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.kjm.toothlinedental.dto.appointment.*;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,14 +34,16 @@ public class AdminAppointmentController {
 
     @PostMapping("/fetch")
     @PreAuthorize("hasAnyRole('STAFF', 'DENTIST', 'ADMIN')")
-    public ResponseEntity<List<AppointmentResponseDto>> fetchAppointments(@RequestHeader("Authorization") String authHeader,
+    public ResponseEntity<Page<AppointmentResponseDto>> fetchAppointments(@RequestHeader("Authorization") String authHeader,
                                                                           @RequestBody AppointmentRequestDto request) {
         String token = authHeader.replace("Bearer ", "");
-        List<AppointmentResponseDto> results = appointmentService.fetchAppointmentsBy(
+        Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
+        Page<AppointmentResponseDto> results = appointmentService.fetchAppointmentsBy(
                 request.getServiceId(),
                 request.getPatientName(),
                 request.getAppointmentDate(),
-                token
+                token,
+                pageable
         );
         return ResponseEntity.ok(results);
     }

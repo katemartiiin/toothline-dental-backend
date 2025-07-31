@@ -16,11 +16,13 @@ import com.kjm.toothlinedental.mapper.AppointmentMapper;
 import com.kjm.toothlinedental.repository.UserRepository;
 import com.kjm.toothlinedental.repository.PatientRepository;
 import com.kjm.toothlinedental.repository.ServiceRepository;
-import com.kjm.toothlinedental.repository.AppointmentRepository;
+import com.kjm.toothlinedental.repository.appointment.AppointmentRepository;
 
 import com.kjm.toothlinedental.dto.appointment.AppointmentResponseDto;
 import com.kjm.toothlinedental.dto.appointment.AppointmentUpdateRequestDto;
 import com.kjm.toothlinedental.dto.appointment.AppointmentCreateRequestDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @org.springframework.stereotype.Service
 public class AppointmentService {
@@ -109,7 +111,7 @@ public class AppointmentService {
     * Params: dentistId, patientName, appointmentDate
     * Used for fetching appointments by parameters
     * */
-    public List<AppointmentResponseDto> fetchAppointmentsBy(Long serviceId, String patientName, LocalDate appointmentDate, String token) {
+    public Page<AppointmentResponseDto> fetchAppointmentsBy(Long serviceId, String patientName, LocalDate appointmentDate, String token, Pageable pageable) {
         Long dentistId = null;
         String role = jwtService.getRole(token);
 
@@ -117,11 +119,9 @@ public class AppointmentService {
             dentistId = Long.valueOf(jwtService.getUserId(token));
         }
 
-        List<Appointment> appointments = appointmentRepository.findFilteredAppointments(serviceId, patientName, appointmentDate, dentistId);
+        Page<Appointment> appointments = appointmentRepository.findFilteredAppointments(serviceId, patientName, appointmentDate, dentistId, pageable);
 
-        return appointments.stream()
-                .map(appointmentMapper::toDto)
-                .collect(Collectors.toList());
+        return appointments.map(appointmentMapper::toDto);
     }
 
     /*

@@ -4,12 +4,16 @@ import java.util.List;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+
 import com.kjm.toothlinedental.dto.AuditLogFetchRequestDto;
 import com.kjm.toothlinedental.dto.AuditLogResponseDto;
 import org.springframework.stereotype.Service;
 
 import com.kjm.toothlinedental.model.AuditLog;
-import com.kjm.toothlinedental.repository.AuditLogRepository;
+import com.kjm.toothlinedental.repository.audit.AuditLogRepository;
 
 @Service
 public class AuditLogService {
@@ -29,19 +33,18 @@ public class AuditLogService {
         auditLogRepository.save(log);
     }
 
-    public List<AuditLogResponseDto> getAllLogs(AuditLogFetchRequestDto dto) {
+    public Page<AuditLogResponseDto> getAllLogs(AuditLogFetchRequestDto dto) {
+        Pageable pageable = PageRequest.of(dto.getPage(), dto.getSize());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd hh:mm a");
 
-        return auditLogRepository.findFilteredLogs(dto.getPerformedBy(), dto.getDate(), dto.getCategory())
-                .stream()
+        return auditLogRepository.findFilteredLogs(dto.getPerformedBy(), dto.getDate(), dto.getCategory(), pageable)
                 .map(log -> new AuditLogResponseDto(
                         log.getId(),
                         log.getAction(),
                         log.getDetails(),
                         log.getPerformedBy(),
                         log.getTimestamp().format(formatter)
-                ))
-                .toList();
+                ));
     }
 
     public List<AuditLogResponseDto> getLatestLogs() {

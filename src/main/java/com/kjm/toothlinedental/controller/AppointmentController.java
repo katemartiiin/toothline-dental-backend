@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.kjm.toothlinedental.common.ApiResponse;
 import com.kjm.toothlinedental.model.Appointment;
 import com.kjm.toothlinedental.service.AppointmentService;
-import com.kjm.toothlinedental.repository.AppointmentRepository;
+import com.kjm.toothlinedental.repository.appointment.AppointmentRepository;
 import com.kjm.toothlinedental.dto.appointment.AppointmentResponseDto;
 import com.kjm.toothlinedental.dto.appointment.AppointmentCreateRequestDto;
 

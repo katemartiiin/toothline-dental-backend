@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import com.kjm.toothlinedental.dto.AuditLogFetchRequestDto;
 import com.kjm.toothlinedental.dto.AuditLogResponseDto;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,7 +26,7 @@ public class SecurityController {
 
     // Get all audit logs
     @PostMapping("/audit-logs")
-    public ResponseEntity<List<AuditLogResponseDto>> getAuditLogs(@RequestBody AuditLogFetchRequestDto dto) {
+    public ResponseEntity<Page<AuditLogResponseDto>> getAuditLogs(@RequestBody AuditLogFetchRequestDto dto) {
         return ResponseEntity.ok(auditLogService.getAllLogs(dto));
     }
     // Get latest audit logs

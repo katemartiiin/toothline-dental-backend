@@ -1,4 +1,4 @@
-package com.kjm.toothlinedental.repository;
+package com.kjm.toothlinedental.repository.audit;
 
 import java.util.List;
 import org.springframework.stereotype.Repository;

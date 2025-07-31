@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.kjm.toothlinedental.dto.user.*;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,8 +33,12 @@ public class UserController {
     // Get all users - admin only
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    public ResponseEntity<Page<UserResponseDto>> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(userService.getAllUsers(pageable));
     }
 
     // Get user by ID - admin only
@@ -56,8 +63,12 @@ public class UserController {
     // Get users by role
     @GetMapping("/role")
     @PreAuthorize("hasAnyRole('STAFF', 'DENTIST', 'ADMIN')")
-    public ResponseEntity<List<UserResponseDto>> getUsersByRole(@RequestParam String role) {
-        return ResponseEntity.ok(userService.getUsersByRole(role));
+    public ResponseEntity<Page<UserResponseDto>> getUsersByRole(
+            @RequestParam String role,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(userService.getUsersByRole(role, pageable));
     }
 
     // Create user - admin only

@@ -15,6 +15,8 @@ import com.kjm.toothlinedental.dto.service.ServiceUpdateRequestDto;
 import com.kjm.toothlinedental.dto.service.ServiceResponseDto;
 
 import com.kjm.toothlinedental.repository.ServiceRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @org.springframework.stereotype.Service
 public class ProcedureService {
@@ -35,14 +37,12 @@ public class ProcedureService {
     /*
     * Fetch all services
     * */
-    public List<ServiceResponseDto> getAllServices(String name) {
-        List<Service> services = (name == null || name.trim().isEmpty())
-                ? serviceRepository.findAllByOrderByCreatedAtAsc()
-                : serviceRepository.findByNameContainingIgnoreCase(name);
+    public Page<ServiceResponseDto> getAllServices(String name, Pageable pageable) {
+        Page<Service> services = (name == null || name.trim().isEmpty())
+                ? serviceRepository.findAllByOrderByCreatedAtAsc(pageable)
+                : serviceRepository.findByNameContainingIgnoreCase(name, pageable);
 
-        return services.stream()
-                .map(serviceMapper::toDto)
-                .toList();
+        return services.map(serviceMapper::toDto);
     }
 
     /*

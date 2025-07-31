@@ -6,6 +6,8 @@ import com.kjm.toothlinedental.dto.user.*;
 import com.kjm.toothlinedental.exception.BadRequestException;
 import com.kjm.toothlinedental.exception.ResourceNotFoundException;
 import com.kjm.toothlinedental.model.Role;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -39,18 +41,16 @@ public class UserService {
     /*
      * Fetch all users
      * */
-    public List<UserResponseDto> getAllUsers() {
-        return userRepository.findAllByOrderByIdAsc()
-                .stream()
-                .map(userMapper::toDto)
-                .toList();
+    public Page<UserResponseDto> getAllUsers(Pageable pageable) {
+        return userRepository.findAllByOrderByIdAsc(pageable)
+                .map(userMapper::toDto);
     }
 
     /*
     * Fetch users by role
     * */
-    public List<UserResponseDto> getUsersByRole(String role) {
-        List<User> users;
+    public Page<UserResponseDto> getUsersByRole(String role, Pageable pageable) {
+        Page<User> users;
 
         if (!role.isEmpty()){
             Role roleEnum;
@@ -60,14 +60,12 @@ public class UserService {
                 throw new BadRequestException("Invalid role: " + role);
             }
 
-            users = userRepository.findByRole(roleEnum);
+            users = userRepository.findByRole(roleEnum, pageable);
         } else {
-            users = userRepository.findAllByOrderByIdAsc();
+            users = userRepository.findAllByOrderByIdAsc(pageable);
         }
 
-        return users.stream()
-                .map(userMapper::toDto)
-                .toList();
+        return users.map(userMapper::toDto);
     }
 
     /*

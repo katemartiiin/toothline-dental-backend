@@ -8,6 +8,7 @@ import com.kjm.toothlinedental.dto.schedule.DentistScheduleCreateRequestDto;
 import com.kjm.toothlinedental.dto.schedule.DentistScheduleMyCreateRequestDto;
 import com.kjm.toothlinedental.exception.ResourceNotFoundException;
 import com.kjm.toothlinedental.model.ScheduleDay;
+import com.kjm.toothlinedental.repository.schedule.DentistScheduleRepository;
 import org.springframework.stereotype.Service;
 
 import com.kjm.toothlinedental.repository.*;

@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.kjm.toothlinedental.dto.patient.PatientCreateRequestDto;
 import com.kjm.toothlinedental.exception.ResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.kjm.toothlinedental.model.Patient;
@@ -37,14 +39,12 @@ public class PatientService {
     /*
      * Fetch all patients
      * */
-    public List<PatientResponseDto> getAllPatients(String name) {
-        List<Patient> patients = (name == null || name.trim().isEmpty())
-                ? patientRepository.findByArchivedFalseOrderByCreatedAtDesc()
-                : patientRepository.findByNameContainingIgnoreCaseAndArchivedFalse(name);
+    public Page<PatientResponseDto> getAllPatients(String name, Pageable pageable) {
+        Page<Patient> patients = (name == null || name.trim().isEmpty())
+                ? patientRepository.findByArchivedFalseOrderByCreatedAtDesc(pageable)
+                : patientRepository.findByNameContainingIgnoreCaseAndArchivedFalse(name, pageable);
 
-        return patients.stream()
-                .map(patientMapper::toDto)
-                .toList();
+        return patients.map(patientMapper::toDto);
     }
 
     /*
