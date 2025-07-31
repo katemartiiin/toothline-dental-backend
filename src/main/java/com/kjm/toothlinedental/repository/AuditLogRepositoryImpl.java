@@ -46,6 +46,7 @@ public class AuditLogRepositoryImpl implements AuditLogRepositoryCustom {
         }
 
         query.where(cb.and(predicates.toArray(new Predicate[0])));
+        query.orderBy(cb.desc(root.get("timestamp")));
         return entityManager.createQuery(query).getResultList();
     }
 }

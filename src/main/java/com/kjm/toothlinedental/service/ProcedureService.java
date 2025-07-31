@@ -37,7 +37,7 @@ public class ProcedureService {
     * */
     public List<ServiceResponseDto> getAllServices(String name) {
         List<Service> services = (name == null || name.trim().isEmpty())
-                ? serviceRepository.findAll()
+                ? serviceRepository.findAllByOrderByCreatedAtAsc()
                 : serviceRepository.findByNameContainingIgnoreCase(name);
 
         return services.stream()

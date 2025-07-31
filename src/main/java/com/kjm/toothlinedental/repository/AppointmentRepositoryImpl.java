@@ -48,6 +48,7 @@ public class AppointmentRepositoryImpl implements AppointmentRepositoryCustom {
         }
 
         query.where(cb.and(predicates.toArray(new Predicate[0])));
+        query.orderBy(cb.desc(root.get("createdAt")));
         return entityManager.createQuery(query).getResultList();
     }
 }

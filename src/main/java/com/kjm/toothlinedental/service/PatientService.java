@@ -39,7 +39,7 @@ public class PatientService {
      * */
     public List<PatientResponseDto> getAllPatients(String name) {
         List<Patient> patients = (name == null || name.trim().isEmpty())
-                ? patientRepository.findByArchivedFalse()
+                ? patientRepository.findByArchivedFalseOrderByCreatedAtDesc()
                 : patientRepository.findByNameContainingIgnoreCaseAndArchivedFalse(name);
 
         return patients.stream()

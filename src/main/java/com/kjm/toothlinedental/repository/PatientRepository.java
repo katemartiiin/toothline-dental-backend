@@ -15,7 +15,7 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     List<Patient> findAllByArchivedTrue();
 
-    List<Patient> findByArchivedFalse();
+    List<Patient> findByArchivedFalseOrderByCreatedAtDesc();
 
     List<Patient> findByNameContainingIgnoreCaseAndArchivedFalse(String name);
 }

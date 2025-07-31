@@ -40,7 +40,7 @@ public class UserService {
      * Fetch all users
      * */
     public List<UserResponseDto> getAllUsers() {
-        return userRepository.findAll()
+        return userRepository.findAllByOrderByIdAsc()
                 .stream()
                 .map(userMapper::toDto)
                 .toList();
@@ -62,7 +62,7 @@ public class UserService {
 
             users = userRepository.findByRole(roleEnum);
         } else {
-            users = userRepository.findAll();
+            users = userRepository.findAllByOrderByIdAsc();
         }
 
         return users.stream()
