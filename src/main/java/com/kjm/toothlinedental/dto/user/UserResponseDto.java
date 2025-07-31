@@ -14,6 +14,8 @@ public class UserResponseDto {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private boolean locked;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -25,4 +27,7 @@ public class UserResponseDto {
 
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
+
+    public boolean isLocked() { return locked; }
+    public void setLocked(boolean locked) { this.locked = locked; }
 }

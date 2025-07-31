@@ -147,9 +147,7 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(rawPassword));
         }
 
-        if (dto.isLocked()) {
-            user.setLocked(true);
-        }
+        user.setLocked(dto.isLocked());
 
         User updated = userRepository.save(user);
         UserResponseDto userDto = userMapper.toDto(updated);

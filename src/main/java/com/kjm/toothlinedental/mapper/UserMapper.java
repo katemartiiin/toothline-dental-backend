@@ -13,6 +13,7 @@ public class UserMapper {
         UserResponseDto dto = new UserResponseDto();
         copyCommonFields(user, dto);
         dto.setRole(user.getRole());
+        dto.setLocked(user.isLocked());
         return dto;
     }
 
