@@ -1,6 +1,4 @@
-package com.kjm.toothlinedental.dto;
-
-import com.kjm.toothlinedental.model.Role;
+package com.kjm.toothlinedental.dto.user;
 
 public class AdminUpdateUserRequestDto {
 

@@ -18,6 +18,9 @@ public class AppointmentUpdateRequestDto {
     // Service
     private Long serviceId;
 
+    private String treatmentPlan;
+    private Double paidAmount;
+
     // Getters and setters
     public Long getDentistId() { return dentistId; }
     public void setDentistId(Long dentistId) { this.dentistId = dentistId; }
@@ -37,4 +40,9 @@ public class AppointmentUpdateRequestDto {
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
 
+    public String getTreatmentPlan() { return treatmentPlan; }
+    public void setTreatmentPlan(String treatmentPlan) { this.treatmentPlan = treatmentPlan; }
+
+    public Double getPaidAmount() { return paidAmount; }
+    public void setPaidAmount(Double paidAmount) { this.paidAmount = paidAmount; }
 }

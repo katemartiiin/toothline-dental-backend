@@ -1,4 +1,4 @@
-package com.kjm.toothlinedental.dto;
+package com.kjm.toothlinedental.dto.schedule;
 
 import com.kjm.toothlinedental.model.DentistSchedule;
 

@@ -2,6 +2,8 @@ package com.kjm.toothlinedental.service;
 
 import java.util.List;
 
+import com.kjm.toothlinedental.dto.service.ServiceCreateRequestDto;
+import com.kjm.toothlinedental.exception.ResourceNotFoundException;
 import com.kjm.toothlinedental.model.Service;
 
 import com.kjm.toothlinedental.mapper.ServiceMapper;
@@ -9,10 +11,12 @@ import com.kjm.toothlinedental.mapper.ServiceMapper;
 import com.kjm.toothlinedental.common.ApiResponse;
 import com.kjm.toothlinedental.common.SecurityUtils;
 
-import com.kjm.toothlinedental.dto.ServiceRequestDto;
-import com.kjm.toothlinedental.dto.ServiceResponseDto;
+import com.kjm.toothlinedental.dto.service.ServiceUpdateRequestDto;
+import com.kjm.toothlinedental.dto.service.ServiceResponseDto;
 
 import com.kjm.toothlinedental.repository.ServiceRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @org.springframework.stereotype.Service
 public class ProcedureService {
@@ -33,14 +37,12 @@ public class ProcedureService {
     /*
     * Fetch all services
     * */
-    public List<ServiceResponseDto> getAllServices(String name) {
-        List<Service> services = (name == null || name.trim().isEmpty())
-                ? serviceRepository.findAll()
-                : serviceRepository.findByNameContainingIgnoreCase(name);
+    public Page<ServiceResponseDto> getAllServices(String name, Pageable pageable) {
+        Page<Service> services = (name == null || name.trim().isEmpty())
+                ? serviceRepository.findAllByOrderByCreatedAtAsc(pageable)
+                : serviceRepository.findByNameContainingIgnoreCase(name, pageable);
 
-        return services.stream()
-                .map(serviceMapper::toDto)
-                .toList();
+        return services.map(serviceMapper::toDto);
     }
 
     /*
@@ -48,14 +50,14 @@ public class ProcedureService {
     * */
     public ServiceResponseDto getServiceById(Long id) {
         Service service = serviceRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Service not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Service not found with ID: " + id));
         return serviceMapper.toDto(service);
     }
 
     /*
      * Create Service
      * */
-    public ApiResponse<ServiceResponseDto> createService(ServiceRequestDto dto) {
+    public ApiResponse<ServiceResponseDto> createService(ServiceCreateRequestDto dto) {
 
         Service service = new Service();
         service.setName(dto.getName());
@@ -69,12 +71,12 @@ public class ProcedureService {
         String performedBy = SecurityUtils.getCurrentUsername();
         auditLogService.logAction("CREATE_SERVICE", performedBy, "Created service #" + service.getId());
 
-        return new ApiResponse<>("Service created successfully", responseDto);
+        return new ApiResponse<>("Service #"+ service.getId() +" created successfully", responseDto);
     }
 
-    public ApiResponse<ServiceResponseDto> updateService(Long id, ServiceRequestDto dto) {
+    public ApiResponse<ServiceResponseDto> updateService(Long id, ServiceUpdateRequestDto dto) {
         Service service = serviceRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Service not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Service not found with ID: " + id));
 
         if (dto.getName() != null) {
             service.setName(dto.getName());
@@ -97,12 +99,12 @@ public class ProcedureService {
         String performedBy = SecurityUtils.getCurrentUsername();
         auditLogService.logAction("UPDATE_SERVICE", performedBy, "Updated service #" + id);
 
-        return new ApiResponse<>("Service updated successfully", serviceMapper.toDto(saved));
+        return new ApiResponse<>("Service #"+ id +" updated successfully", serviceMapper.toDto(saved));
     }
 
     public void deleteService(Long id) {
         if (!serviceRepository.existsById(id)) {
-            throw new RuntimeException("Service not found");
+            throw new ResourceNotFoundException("Service not found with ID: " + id);
         }
 
         serviceRepository.deleteById(id);

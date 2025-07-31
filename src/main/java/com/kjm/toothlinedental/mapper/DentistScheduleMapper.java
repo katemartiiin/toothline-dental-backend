@@ -3,7 +3,7 @@ package com.kjm.toothlinedental.mapper;
 import org.springframework.stereotype.Component;
 
 import com.kjm.toothlinedental.model.DentistSchedule;
-import com.kjm.toothlinedental.dto.DentistScheduleResponseDto;
+import com.kjm.toothlinedental.dto.schedule.DentistScheduleResponseDto;
 
 @Component
 public class DentistScheduleMapper {

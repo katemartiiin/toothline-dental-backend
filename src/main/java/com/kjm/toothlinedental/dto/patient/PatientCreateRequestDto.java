@@ -1,9 +1,18 @@
-package com.kjm.toothlinedental.dto;
+package com.kjm.toothlinedental.dto.patient;
 
-public class PatientRequestDto {
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
+public class PatientCreateRequestDto {
+
+    @NotBlank(message = "Patient name is required.")
     private String name;
+
+    @NotBlank(message = "Email is required.")
+    @Email(message = "Email format is invalid.")
     private String email;
+
+    @NotBlank(message = "Phone number is required.")
     private String phoneNumber;
 
     public String getName() { return name; }
@@ -14,4 +23,5 @@ public class PatientRequestDto {
 
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+
 }

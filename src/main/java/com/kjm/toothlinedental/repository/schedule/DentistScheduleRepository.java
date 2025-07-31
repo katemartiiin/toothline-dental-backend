@@ -1,4 +1,4 @@
-package com.kjm.toothlinedental.repository;
+package com.kjm.toothlinedental.repository.schedule;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface DentistScheduleRepository extends JpaRepository<DentistSchedule, Long>, DentistScheduleRepositoryCustom {
 
-    @Query("SELECT s FROM DentistSchedule s WHERE s.dentist.id = :dentistId")
+    @Query("SELECT s FROM DentistSchedule s WHERE s.dentist.id = :dentistId ORDER BY startTime asc")
     List<DentistSchedule> findByDentistId(@Param("dentistId") Long dentistId);
 }
