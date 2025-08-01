@@ -37,3 +37,8 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 	ignoreFailures = true // for development only
 }
+
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+	archiveFileName.set("toothline.jar")
+	mainClass.set("com.kjm.toothlinedental.system.ToothlinedentalApplication")
+}
