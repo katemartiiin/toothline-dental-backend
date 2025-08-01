@@ -1,14 +1,27 @@
-# Use Java 21 base image
-FROM eclipse-temurin:21-jdk
+# Use a full JDK image to build the app
+FROM eclipse-temurin:21 as builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy the fat jar built by Gradle
-COPY build/libs/*.jar app.jar
+# Copy the source code
+COPY . .
 
-# Expose the port (change if needed)
+# Grant permission to Gradle wrapper if needed
+RUN chmod +x ./gradlew
+
+# Build the fat jar
+RUN ./gradlew bootJar
+
+# -----------------------
+
+# Use a smaller image just to run the jar
+FROM eclipse-temurin:21-jre
+
+WORKDIR /app
+
+# Copy the fat jar from the builder stage
+COPY --from=builder /app/build/libs/*.jar app.jar
+
 EXPOSE 8080
 
-# Run the app
 ENTRYPOINT ["java", "-jar", "app.jar"]
