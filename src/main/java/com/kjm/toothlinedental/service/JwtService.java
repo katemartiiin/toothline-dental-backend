@@ -18,7 +18,9 @@ public class JwtService {
     private final String secretKey;
 
     public JwtService() {
-        Dotenv dotenv = Dotenv.load();
+        Dotenv dotenv = Dotenv.configure()
+                .ignoreIfMissing()
+                .load();
         this.secretKey = dotenv.get("JWT_SECRET");
     }
 
