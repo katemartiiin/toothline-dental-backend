@@ -1,16 +1,18 @@
 package com.kjm.toothlinedental.controller;
 
 import java.util.List;
+
+import com.kjm.toothlinedental.dto.appointment.*;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.kjm.toothlinedental.common.ApiResponse;
 import com.kjm.toothlinedental.service.AppointmentService;
-import com.kjm.toothlinedental.dto.appointment.AppointmentRequestDto;
-import com.kjm.toothlinedental.dto.appointment.AppointmentResponseDto;
-import com.kjm.toothlinedental.dto.appointment.AppointmentCreateRequestDto;
-import com.kjm.toothlinedental.dto.appointment.AppointmentUpdateRequestDto;
 
 @RestController
 @RequestMapping("/api/admin/appointments")
@@ -25,17 +27,23 @@ public class AdminAppointmentController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'DENTIST')")
-    public ResponseEntity<ApiResponse<AppointmentResponseDto>> createAppointmentAsAdmin(@RequestBody AppointmentCreateRequestDto dto) {
+    public ResponseEntity<ApiResponse<AppointmentResponseDto>> createAppointmentAsAdmin(
+            @Valid @RequestBody AppointmentCreateRequestDto dto) {
         return ResponseEntity.ok(appointmentService.createAppointment(dto));
     }
 
     @PostMapping("/fetch")
     @PreAuthorize("hasAnyRole('STAFF', 'DENTIST', 'ADMIN')")
-    public ResponseEntity<List<AppointmentResponseDto>> fetchAppointments(@RequestBody AppointmentRequestDto request) {
-        List<AppointmentResponseDto> results = appointmentService.fetchAppointmentsBy(
-                request.getDentistId(),
+    public ResponseEntity<Page<AppointmentResponseDto>> fetchAppointments(@RequestHeader("Authorization") String authHeader,
+                                                                          @RequestBody AppointmentRequestDto request) {
+        String token = authHeader.replace("Bearer ", "");
+        Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
+        Page<AppointmentResponseDto> results = appointmentService.fetchAppointmentsBy(
+                request.getServiceId(),
                 request.getPatientName(),
-                request.getAppointmentDate()
+                request.getAppointmentDate(),
+                token,
+                pageable
         );
         return ResponseEntity.ok(results);
     }
@@ -53,6 +61,12 @@ public class AdminAppointmentController {
         return ResponseEntity.ok(appointmentService.updateAppointment(id, dto));
     }
 
+    @PatchMapping("/{id}/status")
+    @PreAuthorize("hasAnyRole('STAFF', 'DENTIST')")
+    public ResponseEntity<ApiResponse<AppointmentResponseDto>> updateAppointment(@PathVariable Long id, @RequestParam String status) {
+        return ResponseEntity.ok(appointmentService.updateAppointmentStatus(id, status));
+    }
+
     @GetMapping("/archived")
     @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
     public ResponseEntity<ApiResponse<List<AppointmentResponseDto>>> getArchivedAppointments() {
@@ -68,8 +82,8 @@ public class AdminAppointmentController {
 
         appointmentService.toggleArchiveAppointment(id, archived);
         String message = archived
-                ? "Appointment archived successfully"
-                : "Appointment restored successfully";
+                ? "Appointment #"+id+" archived successfully."
+                : "Appointment #"+id+" restored successfully.";
 
         return ResponseEntity.ok(new ApiResponse<>(message, null));
     }

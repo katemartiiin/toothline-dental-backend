@@ -27,7 +27,14 @@ public class Appointment {
     private String notes;
     private LocalDate appointmentDate;
     private LocalTime appointmentTime;
-    private String status = "PENDING";
+
+    private String treatmentPlan;
+    @Column
+    private Double paidAmount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AppointmentStatus status;
 
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -70,13 +77,19 @@ public class Appointment {
     public LocalTime getAppointmentTime() { return appointmentTime; }
     public void setAppointmentTime(LocalTime appointmentTime) { this.appointmentTime = appointmentTime; }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public AppointmentStatus getStatus() { return status; }
+    public void setStatus(AppointmentStatus status) { this.status = status; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
 
     public boolean isArchived() { return archived; }
-
     public void setArchived(boolean archived) { this.archived = archived; }
+
+
+    public String getTreatmentPlan() { return treatmentPlan; }
+    public void setTreatmentPlan(String treatmentPlan) { this.treatmentPlan = treatmentPlan; }
+
+    public Double getPaidAmount() { return paidAmount; }
+    public void setPaidAmount(Double paidAmount) { this.paidAmount = paidAmount; }
 }

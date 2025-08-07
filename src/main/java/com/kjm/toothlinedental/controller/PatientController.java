@@ -1,13 +1,20 @@
 package com.kjm.toothlinedental.controller;
 
 import java.util.List;
+
+import com.kjm.toothlinedental.dto.patient.PatientCreateRequestDto;
+import com.kjm.toothlinedental.dto.patient.PatientNameRequestDto;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.kjm.toothlinedental.common.ApiResponse;
-import com.kjm.toothlinedental.dto.PatientRequestDto;
-import com.kjm.toothlinedental.dto.PatientResponseDto;
+import com.kjm.toothlinedental.dto.patient.PatientRequestDto;
+import com.kjm.toothlinedental.dto.patient.PatientResponseDto;
 import com.kjm.toothlinedental.service.PatientService;
 
 @RestController
@@ -18,13 +25,6 @@ public class PatientController {
 
     public PatientController (PatientService patientService) {
         this.patientService = patientService;
-    }
-
-    @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
-    public ResponseEntity<ApiResponse<List<PatientResponseDto>>> getAllPatients() {
-        var data = patientService.getAllPatients();
-        return ResponseEntity.ok(new ApiResponse<>("Patients fetched successfully", data));
     }
 
     @GetMapping("/{id}/view")
@@ -41,6 +41,13 @@ public class PatientController {
         return ResponseEntity.ok(new ApiResponse<>("Archived patients fetched successfully", data));
     }
 
+    @PostMapping("/fetch-all")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
+    public ResponseEntity<Page<PatientResponseDto>> getAllPatients(@RequestBody PatientNameRequestDto dto) {
+        Pageable pageable = PageRequest.of(dto.getPage(), dto.getSize());
+        return ResponseEntity.ok(patientService.getAllPatients(dto.getName(), pageable));
+    }
+
     @PostMapping("/fetch")
     @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
     public ResponseEntity<ApiResponse<PatientResponseDto>> getPatientByParams(@RequestBody PatientRequestDto dto) {
@@ -50,7 +57,8 @@ public class PatientController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'DENTIST')")
-    public ResponseEntity<ApiResponse<PatientResponseDto>> createPatient(@RequestBody PatientRequestDto dto) {
+    public ResponseEntity<ApiResponse<PatientResponseDto>> createPatient(
+            @Valid @RequestBody PatientCreateRequestDto dto) {
         return ResponseEntity.ok(patientService.createPatient(dto));
     }
 

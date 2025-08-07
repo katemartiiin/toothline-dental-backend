@@ -24,6 +24,7 @@ dependencies {
 	implementation("org.postgresql:postgresql")
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
 	implementation("io.github.cdimascio:java-dotenv:5.2.2")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -35,4 +36,9 @@ dependencies {
 tasks.withType<Test> {
 	useJUnitPlatform()
 	ignoreFailures = true // for development only
+}
+
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+	archiveFileName.set("toothline.jar")
+	mainClass.set("com.kjm.toothlinedental.system.ToothlinedentalApplication")
 }

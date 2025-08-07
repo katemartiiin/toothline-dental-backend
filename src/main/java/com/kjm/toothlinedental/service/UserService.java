@@ -1,16 +1,21 @@
 package com.kjm.toothlinedental.service;
 
 import java.util.List;
+
+import com.kjm.toothlinedental.dto.user.*;
+import com.kjm.toothlinedental.exception.BadRequestException;
+import com.kjm.toothlinedental.exception.ResourceNotFoundException;
+import com.kjm.toothlinedental.model.Role;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.kjm.toothlinedental.dto.*;
 import com.kjm.toothlinedental.model.User;
 import com.kjm.toothlinedental.mapper.UserMapper;
 
 import com.kjm.toothlinedental.common.ApiResponse;
 import com.kjm.toothlinedental.common.SecurityUtils;
-import com.kjm.toothlinedental.common.PasswordGenerator;
 
 import com.kjm.toothlinedental.repository.UserRepository;
 
@@ -36,11 +41,31 @@ public class UserService {
     /*
      * Fetch all users
      * */
-    public List<UserResponseDto> getAllUsers() {
-        return userRepository.findAll()
-                .stream()
-                .map(userMapper::toDto)
-                .toList();
+    public Page<UserResponseDto> getAllUsers(Pageable pageable) {
+        return userRepository.findAllByOrderByIdAsc(pageable)
+                .map(userMapper::toDto);
+    }
+
+    /*
+    * Fetch users by role
+    * */
+    public Page<UserResponseDto> getUsersByRole(String role, Pageable pageable) {
+        Page<User> users;
+
+        if (!role.isEmpty()){
+            Role roleEnum;
+            try {
+                roleEnum = Role.valueOf(role.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new BadRequestException("Invalid role: " + role);
+            }
+
+            users = userRepository.findByRole(roleEnum, pageable);
+        } else {
+            users = userRepository.findAllByOrderByIdAsc(pageable);
+        }
+
+        return users.map(userMapper::toDto);
     }
 
     /*
@@ -48,21 +73,22 @@ public class UserService {
      * */
     public UserResponseDto getUserById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
         return userMapper.toDto(user);
     }
 
     /*
      * Create User
      * */
-    public ApiResponse<UserCreateResponseDto> createUser(UserRequestDto dto) {
+    public ApiResponse<UserCreateResponseDto> createUser(UserCreateRequestDto dto) {
 
         User user = new User();
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
-        user.setRole(dto.getRole());
+        user.setRole(Role.valueOf(dto.getRole()));
         // Generate default password
-        String rawPassword = PasswordGenerator.generateRandomPassword();
+//        String rawPassword = PasswordGenerator.generateRandomPassword();
+        String rawPassword = "toothline123";
         user.setPassword(passwordEncoder.encode(rawPassword));
 
         User saved = userRepository.save(user);
@@ -76,9 +102,9 @@ public class UserService {
         return new ApiResponse<>("User created successfully", responseDto);
     }
 
-    public ApiResponse<UserProfileResponseDto> updateUserProfile(Long id, UserRequestDto dto) {
+    public ApiResponse<UserProfileResponseDto> updateUserProfile(Long id, UserUpdateRequestDto dto) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
 
         if (dto.getName() != null) {
             user.setName(dto.getName());
@@ -88,12 +114,12 @@ public class UserService {
             user.setEmail(dto.getEmail());
         }
 
-        if (dto.getCurrentPassword() != null) {
+        if (dto.getCurrentPassword() != null && !dto.getCurrentPassword().isEmpty()) {
             if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
-                throw new RuntimeException("Current password is incorrect");
+                throw new BadRequestException("Current password is incorrect");
             }
             if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
-                throw new RuntimeException("Passwords do not match");
+                throw new BadRequestException("Passwords do not match");
             }
             user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         }
@@ -101,24 +127,27 @@ public class UserService {
         User saved = userRepository.save(user);
 
         String performedBy = SecurityUtils.getCurrentUsername();
-        auditLogService.logAction("UPDATE_PROFILE", performedBy, "Updated profile for user #" + id);
+        auditLogService.logAction("UPDATE_PROFILE", performedBy, "Updated user profile" + id);
 
         return new ApiResponse<>("Profile updated successfully", userMapper.profileToDto(saved));
     }
 
     public ApiResponse<AdminUpdateUserResponseDto> updateUserAsAdmin(Long userId, AdminUpdateUserRequestDto dto) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + userId));
 
-        if (dto.getRole() != null) {
-            user.setRole(dto.getRole());
+        if (dto.getRole() != null && !dto.getRole().isEmpty()) {
+            user.setRole(Role.valueOf(dto.getRole()));
         }
 
         String rawPassword = null;
-        if (Boolean.TRUE.equals(dto.getResetPassword())) {
-            rawPassword = PasswordGenerator.generateRandomPassword();
+        if (dto.isResetPassword()) {
+            rawPassword = "toothline123";
+//            rawPassword = PasswordGenerator.generateRandomPassword();
             user.setPassword(passwordEncoder.encode(rawPassword));
         }
+
+        user.setLocked(dto.isLocked());
 
         User updated = userRepository.save(user);
         UserResponseDto userDto = userMapper.toDto(updated);
@@ -128,6 +157,6 @@ public class UserService {
         String performedBy = SecurityUtils.getCurrentUsername();
         auditLogService.logAction("UPDATE_USER_AS_ADMIN", performedBy, "Updated user #" + user.getId());
 
-        return new ApiResponse<>("User updated successfully", responseDto);
+        return new ApiResponse<>("User #" + user.getId() + " updated successfully", responseDto);
     }
 }

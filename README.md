@@ -42,6 +42,7 @@ src/
 │   │   ├── config/
 │   │   ├── controller/
 │   │   ├── dto/
+│   │   ├── exception/
 │   │   ├── mapper/
 │   │   ├── model/
 │   │   ├── repository/

@@ -1,13 +1,11 @@
-package com.kjm.toothlinedental.dto;
+package com.kjm.toothlinedental.dto.user;
 
-import com.kjm.toothlinedental.model.Role;
-
-public class UserRequestDto {
+public class UserUpdateRequestDto {
 
     private String email;
     private String password;
     private String name;
-    private Role role;
+    private String role;
 
     private String currentPassword;
     private String newPassword;
@@ -31,6 +29,6 @@ public class UserRequestDto {
     public String getConfirmPassword() { return confirmPassword; }
     public void setConfirmPassword(String confirmPassword) { this.confirmPassword = confirmPassword; }
 
-    public Role getRole() { return role; }
-    public void setRole(Role role) { this.role = role; }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 }

@@ -3,13 +3,13 @@ package com.kjm.toothlinedental.mapper;
 import org.springframework.stereotype.Component;
 
 import com.kjm.toothlinedental.model.DentistSchedule;
-import com.kjm.toothlinedental.dto.DentistScheduleResponseDto;
+import com.kjm.toothlinedental.dto.schedule.DentistScheduleResponseDto;
 
 @Component
 public class DentistScheduleMapper {
 
     public DentistScheduleResponseDto toDto(DentistSchedule schedule) {
-        DentistScheduleResponseDto dto = new DentistScheduleResponseDto();
+        DentistScheduleResponseDto dto = new DentistScheduleResponseDto(schedule);
         dto.setDentistId(schedule.getDentist().getId());
         dto.setStatus(schedule.getStatus());
         dto.setSchedDay(schedule.getSchedDay());
